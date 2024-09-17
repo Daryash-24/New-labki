@@ -9,13 +9,14 @@ def start():
 
 @app.route("/menu")
 def menu():
-    return """
+    return '''
 <!doctype html>
 <html>
     <head>
         <title>НГТУ, ФБ, Лабораторные работы</title>
     </head>
     <body>
+        <link rel='stylesheet' href = "''' + url_for('static', filename='important.css') + '''">
         <header>
             НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных
         </header>
@@ -30,11 +31,11 @@ def menu():
         </footer>
     </body>
 </html>
-"""
+'''
 
 @app.route("/lab1")
 def lab1():
-    return """
+    return '''
 <!doctype html>
 <html>
     <head>
@@ -68,19 +69,29 @@ def lab1():
         <link rel='stylesheet' href = "''' + url_for('static', filename='important.css') + '''">
     </body>
 </html>
-"""
+'''
 
 @app.route("/lab1/student")
 def student():
     return '''
 <!doctype html>
 <html>
+    <head>
+        <title>НГТУ, ФБ, Лабораторная работа 1 - Студент</title>
+    </head>
     <body>
+        <header>
+            НГТУ, ФБ, WEB-программирование, часть 2. Студент
+        </header>
         <h1>Дыбалина Дарья Александровна</h1>
         <div class="student">
-            <img src="''' + url_for('static', filename='nstu.png') + '''">
+            <img src="''' + url_for('static', filename='nstu.png') + '''", width='700px'>
         </div>
         <link rel='stylesheet' href = "''' + url_for('static', filename='important.css') + '''">
+
+        <footer>
+            &copy; Дарья Александровна Дыбалина, ФБИ-23, 3 курс, 2024
+        </footer>
     </body>
 </html>
 '''
@@ -89,7 +100,14 @@ def python():
     return '''
 <!doctype html>
 <html>
+    <head>
+        <title>НГТУ, ФБ, Лабораторные работы - Python</title>
+    </head>
     <body>
+        <header>
+            НГТУ, ФБ, WEB-программирование, часть 2.
+        </header>
+
         <h1>Язык программирования Python</h1>
 
         <h2>Насколько Python популярен</h2>
@@ -140,6 +158,10 @@ def python():
         Разработку на Python ведут в Google, Facebook, Dropbox, Spotify, Quora, Netflix, 
         Microsoft Intel, а в России — «Яндекс», «ВКонтакте» и «Сбербанк». Это серьёзно влияет на статус языка.
 
+        <footer>
+            &copy; Дарья Александровна Дыбалина, ФБИ-23, 3 курс, 2024
+        </footer>
+
         <div class="python">
             <img src="''' + url_for('static', filename='python.jpg') + '''", width="500px">
         </div>
@@ -153,10 +175,21 @@ def oak():
     return '''
 <!doctype html>
 <html>
+    <head>
+        <title>НГТУ, ФБ, Лабораторные работы - Дуб</title>
+    </head>
     <body>
+        <header>
+            НГТУ, ФБ, WEB-программирование, часть 2.
+        </header>
         <h1>Дуб</h1>
-        <img src="''' + url_for('static', filename='oak.jpg') + '''">
-        <link rel='stylesheet' href = "''' + url_for('static', filename='lab1.css') + '''">
+        <div class="oak">
+            <img src="''' + url_for('static', filename='oak.jpg') + '''">
+        </div>
+        <link rel='stylesheet' href = "''' + url_for('static', filename='important.css') + '''">
+        <footer>
+            &copy; Дарья Александровна Дыбалина, ФБИ-23, 3 курс, 2024
+        </footer>
     </body>
 </html>
 '''
