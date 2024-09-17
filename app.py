@@ -59,6 +59,19 @@ def lab1():
 </html>
 """
 
+@app.route("/lab1/student")
+def student():
+    return '''
+<!doctype html>
+<html>
+    <body>
+        <h2>Дыбалина Дарья Александровна</h2>
+        <img src="''' + url_for('static', filename='oak.jpg') + '''">
+        <link rel='stylesheet' href = "''' + url_for('static', filename='lab1.css') + '''">
+    </body>
+</html>
+'''
+
 @app.route("/lab1/oak")
 def oak():
     return '''
