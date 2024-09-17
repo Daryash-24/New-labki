@@ -41,6 +41,7 @@ def lab1():
         <title>НГТУ, ФБ, Лабораторные работы</title>
     </head>
     <body>
+
         <header>
             НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных
         </header>
@@ -51,10 +52,20 @@ def lab1():
         Werkzeug, а также шаблонизатор Jinja2. Относится к категории так
         называемых микрофреймворков — минималистичных каркасов
         веб-приложений, сознательно предоставляющих лишь самые базовые возможности.
+        <p><a href="/menu">Меню</a>
 
+        <h2>Реализованные роуты</h2>
+        <ol>
+            <li><a href="/lab1/oak">Дуб</a></li>
+            <li><a href="/lab1/student">Студент</a></li>
+            <li><a href="/lab1/python">Python</a></li>
+        </ol>
+        
         <footer>
             &copy; Дарья Александровна Дыбалина, ФБИ-23, 3 курс, 2024
         </footer>
+
+        <link rel='stylesheet' href = "''' + url_for('static', filename='important.css') + '''">
     </body>
 </html>
 """
@@ -136,7 +147,6 @@ def python():
     </body>
 </html>
 '''
-
 
 @app.route("/lab1/oak")
 def oak():
