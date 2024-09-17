@@ -1,0 +1,29 @@
+body {
+    background-color: #81decd;
+    color: white;
+    font-family: Helvetica;
+}
+
+h1{
+    text-align: center;
+    margin-top: 70px;
+    font-size: 50px;
+}
+
+h2{
+    font-size: 35px;
+    margin-left: 80px;
+}
+
+p{
+    font-size: 20px;
+    margin-left: 80px;
+    margin-right: 100px;
+    text-align: justify;
+}
+
+img{
+    position: relative;
+    margin-left: 210px;
+    margin-top: 50px;
+}
