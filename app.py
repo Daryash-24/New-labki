@@ -66,7 +66,9 @@ def student():
 <html>
     <body>
         <h1>Дыбалина Дарья Александровна</h1>
-        <img src="''' + url_for('static', filename='nstu.png') + '''">
+        <div class="student">
+            <img src="''' + url_for('static', filename='nstu.png') + '''">
+        </div>
         <link rel='stylesheet' href = "''' + url_for('static', filename='important.css') + '''">
     </body>
 </html>
@@ -127,7 +129,9 @@ def python():
         Разработку на Python ведут в Google, Facebook, Dropbox, Spotify, Quora, Netflix, 
         Microsoft Intel, а в России — «Яндекс», «ВКонтакте» и «Сбербанк». Это серьёзно влияет на статус языка.
 
-        <img src="''' + url_for('static', filename='nstu.png') + '''">
+        <div class="python">
+            <img src="''' + url_for('static', filename='python.jpg') + '''", width="500px">
+        </div>
         <link rel='stylesheet' href = "''' + url_for('static', filename='important.css') + '''">
     </body>
 </html>

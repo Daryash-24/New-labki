@@ -22,8 +22,11 @@ p{
     text-align: justify;
 }
 
-img{
-    position: relative;
-    margin-left: 210px;
+.student{
+    margin-left: 200px;
     margin-top: 50px;
+}
+
+.python{
+    margin-left: 450px;
 }
