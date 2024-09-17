@@ -1,0 +1,15 @@
+body {
+    background-color: #b4c27e;
+    color: white;
+    font-family: Helvetica;
+}
+
+h1{
+    text-align: center;
+}
+
+img{
+    position: relative;
+    margin-left: 410px;
+    margin-top: 80px;
+}
