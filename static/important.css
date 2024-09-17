@@ -1,0 +1,89 @@
+body {
+    background-color: #81decd;
+    color: white;
+    font-family: Helvetica;
+    font-size: 20px;
+}
+
+footer {
+    background-color: #319180; 
+    color: #1f3b47; 
+    font-family: helvetica; 
+    text-align: center; 
+    font-size: 20px;
+    position: fixed;
+    padding: 10px;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
+header {
+    background-color: #c8e9f7; 
+    color: #1f3b47; 
+    padding: 30px;
+    width: 100%;
+    font-size: 14pt
+}
+
+h1{
+    text-align: center;
+    margin-top: 70px;
+    font-size: 50px;
+}
+
+h2{
+    font-size: 35px;
+    margin-left: 80px;
+}
+
+p{
+    font-size: 20px;
+    margin-left: 80px;
+    margin-right: 100px;
+    text-align: justify;
+}
+
+ol{
+    margin-left: 60px;
+}
+
+a {
+    color: #9702A7;
+    text-decoration: none;
+    transition: 1s;
+}
+
+a:link {
+    color: #9702A7;
+}
+
+a:visited {
+    color: #8436eb;
+}
+
+a:hover {
+    color: #eb36e5;
+    text-decoration: underline;
+    transition: 0.3s;
+}
+
+a:active {
+    color: #EF54AC;
+}
+
+.oak{
+    margin-left: 400px;
+    margin-bottom: 70px;
+}
+
+.student{
+    margin-left: 400px;
+    margin-top: 50px;
+    margin-bottom: 70px;
+}
+
+.python{
+    margin-left: 450px;
+    margin-bottom: 70px;
+}
