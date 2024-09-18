@@ -58,6 +58,7 @@ def lab1():
             <li><a href="/lab1/oak">Дуб</a></li>
             <li><a href="/lab1/student">Студент</a></li>
             <li><a href="/lab1/python">Python</a></li>
+            <li><a href="/lab1/cats">Котики</a></li>
         </ol>
         
         <footer>
@@ -214,6 +215,24 @@ def cats():
         <div class="cat">
             <img src="''' + url_for('static', filename='cat.jpg') + '''">
         </div>
+
+        <p><b>Причина 2. Не устал.</b>
+        <p>Вашей кошке просто некуда выплескивать энергию! Возможно, еще и вашего внимания не хватает.
+        Наши кисы большую часть дня просто бессовестно спят или лежат в причудливых позах.
+        <div class="tired">
+            <img src="''' + url_for('static', filename='tired.png') + '''">
+        </div>
+
+        <p><b>Причина 4. Гулянка!</b>
+        <p>Если кошка или кот "гуляют", находятся "в охоте", у них "весеннее обострение" - 
+        ночные тыгыдыки могут участиться и усилиться. Держись дом и его обитатели
+        <div class="night">
+            <img src="''' + url_for('static', filename='night.jpg') + '''">
+        </div>
+        <div class="mycat">
+            <img src="''' + url_for('static', filename='mycat.jpg') + '''">
+        </div>
+
         <link rel='stylesheet' href = "''' + url_for('static', filename='important.css') + '''">
         <footer>
             &copy; Дарья Александровна Дыбалина, ФБИ-23, 3 курс, 2024
