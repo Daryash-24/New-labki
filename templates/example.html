@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Дарья Дыбалина. Лабораторная работа {{number}}</title>
+    <title>{% if name %}{{name}}{% else %}Анонимус{% endif %}.{% if number %} Лабораторная работа {{number}} {% endif %}</title>
     <link rel="stylesheet" href={{url_for('static', filename='important.css')}}>
 </head>
 <body>
     <header>
-        WEB-программирование, часть 2. Лабораторная работа {{number}}
+        WEB-программирование, часть 2. {% if number %}Лабораторная работа {{number}} {% endif %}
     </header>
 
     <main>
@@ -16,11 +16,29 @@
         11 * 28 = {{11 * 28}}<br>
         3258 - 759 = {{3258 - 759}}<br>
         8452/793 = {{8452/793}}<br>
-        45^8 = {{ 45 }} <sup>8</sup>
+        45 <sup>8</sup> = {{ 45 ** 8 }}
     </main>
 
     <footer>
-        &copy; {{name}}, {{group}}, {{cours}} курс, 2024
+        &copy; 
+        {% if name %}
+            {{name}},
+        {% else %}
+            Анонимус,
+        {% endif %}
+
+        {% if group %}
+            {{group}},
+        {% else %}
+            Группа неизвестна,
+        {% endif %}
+        {% if cours %}
+            {{cours}} курс,
+        {% else %} 
+            не последний курс,
+        {% endif %}
+
+        2024
     </footer>
     
 </body>
