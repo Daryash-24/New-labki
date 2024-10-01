@@ -254,7 +254,7 @@ def a():
 def a2():
     return 'со слэшем'
 
-flower_list = ('Пион', 'Гортензия', 'Сирень', 'Хризантема')
+flower_list = ['Пион', 'Гортензия', 'Сирень', 'Хризантема']
 
 @app.route('/lab2/flowers/<int:flower_id>')
 def flowers(flower_id):
@@ -262,3 +262,18 @@ def flowers(flower_id):
         return "такого цветка нет", 404
     else:
         return "цветок: " + flower_list[flower_id]
+
+@app.route('/lab2/add_flower/<name>')
+def add_flower(name):
+    flower_list.append(name)
+    return f'''
+<!doctype html>
+<html>
+    <body>
+    <h1>Добавлен новый цветочек</h1>
+    <p>Название нового цветочка: {name} </p>
+    <p>Всего цветочков {len(flower_list)} </p>
+    <p>Полный список: {flower_list} </p>
+    </body>
+</html>
+'''
