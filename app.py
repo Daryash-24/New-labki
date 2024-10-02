@@ -358,3 +358,20 @@ def calc_one_number(a):
 @app.route('/lab2/calc/<int:a>/<int:b>')
 def calc(a, b):
     return render_template('calc.html', a=a, b=b)
+
+books = [
+    {'author': 'Джон Р. Р. Толкин', 'title': 'Властилин колец(сборник)', 'genre': 'Фэнтези', 'pages': 1120},
+    {'author': 'Маргарет Митчел', 'title': 'Кнесенные ветром', 'genre': 'Исторический роман', 'pages': 992},
+    {'author': 'Стивен Кинг', 'title': '11/22/63', 'genre': 'Фантастика', 'pages': 800},
+    {'author': 'Джоан Роулинг', 'title': 'Гарри Поттер и узник Азкабана', 'genre': 'Фэнтези', 'pages': 492},
+    {'author': 'Стивен Кинг', 'title': 'Зеленая миля', 'genre': 'Мистика', 'pages': 384},
+    {'author': 'Джордж Мартин', 'title': 'Буря мечей', 'genre': 'Фэнтези', 'pages': 1168},
+    {'author': 'Агата Кристи', 'title': 'Десять негретят', 'genre': 'Детектив', 'pages': 288},
+    {'author': 'Сара Дж. Маас', 'title': 'Королева Теней', 'genre': 'Фэнтези', 'pages': 736},
+    {'author': 'Сара Дж. Маас', 'title': 'Королевство Гнева и Тумана', 'genre': 'Фэнтези', 'pages': 704},
+    {'author': 'Оскар Уайльд', 'title': 'Портрет Дориана Грея', 'genre': 'Роман', 'pages': 320},
+]
+
+@app.route('/lab2/books')
+def books_list():
+    return render_template('books_list.html', books=books)
