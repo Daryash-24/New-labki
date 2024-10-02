@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template
+from flask import Flask, redirect, url_for, render_template, render_template_string
 app = Flask(__name__)
 
 @app.route("/")
@@ -261,8 +261,16 @@ def flowers(flower_id):
     if flower_id >= len(flower_list):
         return "такого цветка нет", 404
     else:
-        return "цветок: " + flower_list[flower_id]
-
+        return render_template_string('''
+<!doctype html>
+<html>
+    <body>
+        <h1>Цветочек: {{ flower_name }}</h1>
+        <a href="/lab2/all_flowers">Посмотреть все цветочки</a>
+    </body>
+</html>
+''', flower_name = flower_list[flower_id])
+    
 @app.route('/lab2/add_flower/<name>')
 def add_flower(name):
     flower_list.append(name)
@@ -277,6 +285,41 @@ def add_flower(name):
     </body>
 </html>
 '''
+
+@app.route('/lab2/all_flowers/')
+def all_flowers():
+    return render_template_string('''
+<!doctype html>
+<html>
+    <body>
+        <h1>Список всех цветов</h1>
+        <ol>
+            {% for flower in flowers %}
+                <li>{{ flower }}</li>
+            {% endfor %}
+        </ol>
+        <p>Всего цветов: {{ count }}</p>
+        <a href="/lab2/clear_flowers">Очистить список цветов</a>
+    </body>
+</html>
+''', flowers=flower_list, count=len(flower_list))
+
+@app.route('/lab2/clear_flowers')
+def clear_flowers():
+    flower_list.clear()
+    return render_template_string('''
+<!doctype html>
+<html>
+    <body>
+        <h1>Список цветов очищен</h1>
+        <a href="/lab2/all_flowers">Посмотреть все цветы</a>
+    </body>
+</html>
+''')
+
+@app.route('/lab2/add_flower/')
+def add_flower_noname():
+    return '<h1>Ошибка 400</h1><p>Вы не задали имя цветка</p>', 400
 
 @app.route('/lab2/example')
 def example():
@@ -303,3 +346,4 @@ def lab2():
 def filters():
     phrase = "О <b>сколько</b> нам <u>открытий</u> <i>чудных...</i>"
     return render_template('filter.html', phrase = phrase)
+
