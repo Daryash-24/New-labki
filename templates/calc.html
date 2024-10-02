@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if name %}{{name}}{% else %}Анонимус{% endif %}.{% if number %} Лабораторная работа {{number}} {% endif %}</title>
+    <link rel="stylesheet" href={{url_for('static', filename='important.css')}}>
+</head>
+<body>
+    <header>
+        WEB-программирование, часть 2. {% if number %}Лабораторная работа {{number}} {% endif %}
+    </header>
+
+    <main>
+        <h1>Расчет с параметрами:</h1>
+        <p>{{a}} + {{b}} = {{ a + b }}</p>
+        <p>{{a}} - {{b}} = {{ a - b }}</p>
+        <p>{{a}} * {{b}} = {{ a * b }}</p>
+        <p>{{a}} / {{b}} = {{ a / b }}</p>
+        <p>{{a}}<sup>{{b}}</sup> = {{ a ** b }}</p> 
+    </main>
+
+    <footer>
+        &copy; 
+        {% if name %}
+            {{name}},
+        {% else %}
+            Анонимус,
+        {% endif %}
+
+        {% if group %}
+            {{group}},
+        {% else %}
+            Группа неизвестна,
+        {% endif %}
+        {% if cours %}
+            {{cours}} курс,
+        {% else %} 
+            не последний курс,
+        {% endif %}
+
+        2024
+    </footer>
+    
+</body>
+</html>

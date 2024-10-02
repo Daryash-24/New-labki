@@ -347,3 +347,14 @@ def filters():
     phrase = "О <b>сколько</b> нам <u>открытий</u> <i>чудных...</i>"
     return render_template('filter.html', phrase = phrase)
 
+@app.route('/lab2/calc/')
+def calc_default():
+    return redirect(url_for('calc', a=1, b=1))
+
+@app.route('/lab2/calc/<int:a>')
+def calc_one_number(a):
+    return redirect(url_for('calc', a=a, b=1))
+
+@app.route('/lab2/calc/<int:a>/<int:b>')
+def calc(a, b):
+    return render_template('calc.html', a=a, b=b)
