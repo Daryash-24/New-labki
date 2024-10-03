@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <link rel="stylesheet" href={{url_for('static', filename='important.css')}}>
+  <style>
+    .object-container {
+        display: flex; 
+        align-items: center; 
+        margin-bottom: 20px; 
+    }
+  
+      .film-info {
+        margin-left: 20px; 
+    }
+  
+      .film-info h2 {
+        margin-bottom: 10px;
+    }
+
+  </style>
+</head>
+<body>
+  <h1>Список моих любимых фильмов:</h1>
+  <ul>
+    {% for film in films %}
+        <li class="object-container">
+            <img src="{{ film.image }}"   style="width: 300px">
+            <div class="film-info">
+                <h2>{{ film.name }}</h2>
+                <p>{{ film.description }}</p>
+            </div>
+      </li>
+    {% endfor %}
+  </ul>
+</body>
+</html>
+
