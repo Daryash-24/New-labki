@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{# номер лабораторной работы: #}
+{% block lab %}Лабораторная работа 2{% endblock %}
+
+{# основной контент: #}
+{% block main %}
+<h1>Список всех цветов</h1>
+<style>
+.add-button {
+    margin: 6px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    background-color: rgb(175, 175, 245);
+    border-radius: 5px;
+    padding: 15px 25px;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+}
+
+.add-button:hover {
+    background-color: #c8e9f7; 
+    color: #1f3b47;
+    transform: scale(1.1)
+}
+form label {
+    display: block;
+    margin-bottom: 5px;
+
+}
+
+form input[type="text"] {
+    width: 200px; 
+    padding: 5px;
+    margin-bottom: 15px; 
+    border: 1px solid #ccc; 
+    border-radius: 3px; 
+    
+}
+
+form input[type="submit"] {
+    margin-top: 10px;
+}
+
+</style>
+        <ol>
+            {% for index in range(flowers|length) %}
+                <li>{{ flowers[index].name }} - {{ flowers[index].price }}
+                    <a href="/lab2/delete_flower/{{ index }}">Удалить</a>
+                </li>
+            {% endfor %}
+        </ol>
+        <p>Всего цветов: {{ flowers|length }}</p>
+        <a href="/lab2/clear_flowers">Очистить список цветов</a>
+        <br>
+        <form method="POST" action="/lab2/add_flower/">
+            <label for="flower_name">Название цветка:</label>
+            <input type="text" id="flower_name" name="flower_name"><br><br>
+            <label for="flower_price">Цена:</label>
+            <input type="text" id="flower_price" name="flower_price"><br><br>
+            <input type="submit" value="Добавить" class="add-button">
+        </form>
+{% endblock %}
