@@ -6,7 +6,7 @@ def start():
     return redirect ("/menu", code=302)
 
 @app.route("/menu")
-def menu():
+def menu(): 
     return '''
 <!doctype html>
 <html>
@@ -22,6 +22,7 @@ def menu():
         <h1>Меню</h1>
         <ol>
             <li><a href="/lab1">Первая лабораторная</a></li>
+            <li><a href = "/lab2">Вторая лабораторная работа</li>
         </ol>
 
         <footer>
