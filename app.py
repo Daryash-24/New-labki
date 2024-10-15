@@ -1,152 +1,39 @@
 from flask import Flask, redirect, url_for, render_template, render_template_string, abort, request
 from lab1 import lab1
+from lab2 import lab2
 
 app = Flask(__name__)
 app.register_blueprint(lab1)
+app.register_blueprint(lab2)
 
-@app.route('/lab2/a')
-def a():
-    return 'без слэша'
+@app.route("/")
+@app.route("/index")
 
+def start():
+    return redirect ("/menu", code=302)
 
-@app.route('/lab2/a/')
-def a2():
-    return 'со слэшем'
+@app.route("/menu")
+def menu():
+    return '''
+<!doctype html>
+<html>
+    <head>
+        <title>НГТУ, ФБ, Лабораторные работы</title>
+    </head>
+    <body>
+        <link rel='stylesheet' href = "''' + url_for('static', filename='important.css') + '''">
+        <header>
+            НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных
+        </header>
 
-flower_list = [
-    {"name": "Гортензия", "price": 950},
-    {"name": "Пион", "price": 500},
-    {"name": "Хризантема", "price": 350},
-    {"name": "Подсолнух", "price": 450}
-]
+        <h1>Меню</h1>
+        <ol>
+            <li><a href="/lab1">Первая лабораторная</a></li>
+        </ol>
 
-
-@app.route('/lab2/all_flowers/')
-def all_flowers():
-    return render_template('all_flowers.html', flowers=flower_list)
-
-
-@app.route('/lab2/add_flower/<string:flower_name>/<int:flower_price>')
-def add_flower(flower_name, flower_price):
-    flower_list.append({'name': flower_name, 'price': flower_price})
-    return redirect(url_for('all_flowers'))
-
-
-@app.route('/lab2/delete_flower/<int:flower_index>')
-def delete_flower(flower_index):
-    if 0 <= flower_index < len(flower_list):
-        del flower_list[flower_index]
-        return redirect(url_for('all_flowers'))
-    else:
-        abort(404)
-
-
-@app.route('/lab2/clear_flowers/')
-def clear_flowers():
-    global flower_list
-    flower_list = []
-    return redirect(url_for('all_flowers'))
-
-
-@app.route('/lab2/example')
-def example():
-    name = 'Дарья Дыбалинa'
-    number = '2'
-    group = 'ФБИ-23'
-    cours = '3'
-    fruits = [
-        {'name': 'манго', 'price': '249'},
-        {'name': 'апельсины', 'price': '150'},
-        {'name': 'бананы', 'price': '179'},
-        {'name': 'персики', 'price': '220'},
-        {'name': 'дыня', 'price': '200'}
-    ]
-    return render_template('example.html', 
-                           name = name, number = number, group = group, 
-                           cours = cours, fruits = fruits)
-
-
-@app.route('/lab2/')
-def lab2():
-    return render_template('lab2.html')
-
-
-@app.route('/lab2/filters')
-def filters():
-    phrase = "О <b>сколько</b> нам <u>открытий</u> <i>чудных...</i>"
-    return render_template('filter.html', phrase = phrase)
-
-
-@app.route('/lab2/calc/')
-def calc_default():
-    return redirect(url_for('calc', a=1, b=1))
-
-
-@app.route('/lab2/calc/<int:a>')
-def calc_one_number(a):
-    return redirect(url_for('calc', a=a, b=1))
-
-
-@app.route('/lab2/calc/<int:a>/<int:b>')
-def calc(a, b):
-    return render_template('calc.html', a=a, b=b)
-
-books = [
-    {'author': 'Джон Р. Р. Толкин', 'title': 'Властилин колец(сборник)', 'genre': 'Фэнтези', 'pages': 1120},
-    {'author': 'Маргарет Митчел', 'title': 'Кнесенные ветром', 'genre': 'Исторический роман', 'pages': 992},
-    {'author': 'Стивен Кинг', 'title': '11/22/63', 'genre': 'Фантастика', 'pages': 800},
-    {'author': 'Джоан Роулинг', 'title': 'Гарри Поттер и узник Азкабана', 'genre': 'Фэнтези', 'pages': 492},
-    {'author': 'Стивен Кинг', 'title': 'Зеленая миля', 'genre': 'Мистика', 'pages': 384},
-    {'author': 'Джордж Мартин', 'title': 'Буря мечей', 'genre': 'Фэнтези', 'pages': 1168},
-    {'author': 'Агата Кристи', 'title': 'Десять негретят', 'genre': 'Детектив', 'pages': 288},
-    {'author': 'Сара Дж. Маас', 'title': 'Королева Теней', 'genre': 'Фэнтези', 'pages': 736},
-    {'author': 'Сара Дж. Маас', 'title': 'Королевство Гнева и Тумана', 'genre': 'Фэнтези', 'pages': 704},
-    {'author': 'Оскар Уайльд', 'title': 'Портрет Дориана Грея', 'genre': 'Роман', 'pages': 320},
-]
-
-
-@app.route('/lab2/books')
-def books_list():
-    return render_template('books_list.html', books=books)
-
-films = [
-    {
-        "name": "Интерстеллар",
-        "image": "/static/inter.jpg",
-        "description": "Фильм Интерстеллар (Interstellar) — это научно-фантастическая драма,"
-        "которая оставляет зрителя задумчивым и проникает в самые глубины его сознания. "
-        "Режиссер Кристофер Нолан создал шедевр, который заслуживает внимания и обязательно стоит посмотреть. "
-    },
-    {
-        "name": "Начало",
-        "image": "/static/incep.jpg",
-        "description": "Несмотря на достаточно сложносочиненный сюжет, затрагивающий темы человеческого бессознательного "
-        "и манипуляций над ним, «Начало» остается ярким примером тождественности гениальности и простоты, которая в свое "
-        "время была воспета классиками философской науки в лице Евклида, Да Винчи. В «Начале» много визуальной и диалоговой "
-        "экспозиции — именно она активно помогает зрителям разобраться в сложной природе сновидений, а также механике влияния на подсознание."
-    },
-    {
-        "name": "Время",
-        "image": "/static/time.jpg",
-        "description": "Неординарный сюжет  заставляет задуматься о многих ценностях. Как мы зачастую тратим  время на пустые разговоры "
-        "с людьми,которые нам совсем неинтересны. На жизнь в социальных сетях, залипая в экраны телефонов, не замечаем, как пролетают секунды, "
-        "минуты, часы. Тратим бесценное время своей жизни на решение чужих вопросов, отодвигая свои дела на потом, не можем сказать людям: «Нет»."
-    },
-    {
-        "name": "Хроники Нарнии: Принц Каспиан",
-        "image": "/static/narnia.jpg",
-        "description": "Хроники Нарнии» оставили след в моей памяти, как цикл фильмов о, продуманном до нЕльзя, вымышленном мире: "
-        "со своими героями, порядками и укладом жизни. Сродни миру «Гарри Поттера» или, скажем, «Властелина колец». "
-    },
-    {
-        "name": "Кто я?",
-        "image": "/static/who.jpg",
-        "description": "Кто я? — это фильм, который вдохновляет нас на то, чтобы стать лучше, чтобы быть честными с "
-        "самими собой, чтобы не бояться идти против течения."
-    }
-]
-
-
-@app.route('/lab2/films')
-def film_list():
-    return render_template("film_list.html", films=films)
+        <footer>
+            &copy; Дарья Александровна Дыбалина, ФБИ-23, 3 курс, 2024
+        </footer>
+    </body>
+</html>
+'''
