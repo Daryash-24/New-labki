@@ -26,7 +26,23 @@ header {
     font-size: 14pt
 }
 
-
+button{
+    margin: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    background-color: #c8e9f7;
+    border: 2px solid  #8436eb;
+    border-radius: 5px;
+    padding: 12px 17px;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+}
+button:hover{
+    background-color:  #8436eb; 
+    color: white;
+    transform: scale(1.1)
+}
 
 h1{
     text-align: center;
