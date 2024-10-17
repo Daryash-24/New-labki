@@ -55,7 +55,7 @@ input[type="date"]{
     <form action="/lab3/ticket" onsubmit="return validateForm()">
         <div>
             <label>
-                <input type="text" name="fio" value="{{fio or ''}}" placeholder="Введите ваше ФИО" style="width: 400px;" required>
+                <input type="text" name="fio" placeholder="Введите ваше ФИО" style="width: 400px;" required>
             </label>
         </div>
 
@@ -86,11 +86,11 @@ input[type="date"]{
         
         <div>Есть ли у Вас багаж?
             <label>
-                <input type="radio" name="baggage">Есть (+250 рублей)
+                <input type="radio" name="baggage" value="on">Есть (+250 рублей)
             </label>
 
             <label>
-                <input type="radio" name="baggage" checked>Нет
+                <input type="radio" name="baggage" value="off" checked>Нет
             </label>
         </div>
 
@@ -121,11 +121,11 @@ input[type="date"]{
 
         <div>Хотите оформить страховку?
             <label>
-                <input type="radio" name="insurance">Да (+150 рублей)
+                <input type="radio" name="insurance" value="on">Да (+150 рублей)
             </label>
 
             <label>
-                <input type="radio" name="insurance" checked>Нет
+                <input type="radio" name="insurance" value="off" checked>Нет
             </label>
         </div>
 
