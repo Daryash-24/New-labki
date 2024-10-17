@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Дарья Дыбалина. {% block lab %}{% endblock %}</title>
+    <title>Дарья Дыбалина. {% block lab %}{% endblock %}  </title>
     <link rel="stylesheet" href={{url_for('static', filename='lab1/important.css')}}>
     <link rel="shortcut icon" href="{{ url_for('static', filename='lab1/favicon.ico') }}">
     <style>
@@ -35,14 +35,12 @@
 </head>
 <body>
     <header>
-        WEB-программирование, часть 2. {{ self.lab() }}
+        WEB-программирование, часть 2. {{ self.lab() }} <a href="/menu">Главное меню</a>
     </header>
 
     <main>
         {% block main %}{% endblock %}
-        <nav>
-            <a href="/menu">Главное меню</a>
-        </nav>
+
     </main>
 
     <footer>

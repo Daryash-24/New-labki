@@ -8,7 +8,7 @@
 </head>
 <body>
     <header>
-        WEB-программирование, часть 2. {% if number %}Лабораторная работа {{number}} {% endif %}
+        WEB-программирование, часть 2. {% if number %}Лабораторная работа {{number}} {% endif %} <a href="/menu">Главное меню</a>
     </header>
 
     <main>
@@ -22,6 +22,10 @@
             <li>{{f.name}}: {{f.price}}&#8381;</li>
             {% endfor %}
         </ul>
+
+        <nav>
+            <a href="/lab2">Меню 2 лабораторной</a>
+        </nav>
     </main>
 
     <footer>

@@ -101,6 +101,16 @@ def settings():
                                          background=background, size=size, font_style=font_style))
 
 
+@lab3.route('/lab3/clear_cookies')
+def clear_cookies():
+  resp = make_response(redirect('/lab3/settings'))
+  resp.set_cookie('color', '', expires=0)
+  resp.set_cookie('background', '', expires=0)
+  resp.set_cookie('size', '', expires=0)
+  resp.set_cookie('font-style', '', expires=0)
+  return resp
+
+
 @lab3.route('/lab3/ticket_registration')
 def ticket_registration():
     return render_template('lab3/ticket_registration.html')
