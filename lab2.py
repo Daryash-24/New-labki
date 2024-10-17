@@ -1,6 +1,9 @@
 from flask import Blueprint, url_for, redirect, render_template, render_template_string, abort, request
 lab2 = Blueprint('lab2', __name__)
 
+@lab2.route('/lab2/')
+def labs2():
+    return render_template('lab2/lab2.html')
 
 @lab2.route('/lab2/a')
 def a():
@@ -21,7 +24,7 @@ flower_list = [
 
 @lab2.route('/lab2/all_flowers/')
 def all_flowers():
-    return render_template('all_flowers.html', flowers=flower_list)
+    return render_template('lab2/all_flowers.html', flowers=flower_list)
 
 
 @lab2.route('/lab2/add_flower', methods=['POST'])
@@ -61,7 +64,7 @@ def example():
         {'name': 'персики', 'price': '220'},
         {'name': 'дыня', 'price': '200'}
     ]
-    return render_template('example.html', 
+    return render_template('lab2/example.html', 
                            name = name, number = number, group = group, 
                            cours = cours, fruits = fruits)
 
@@ -74,7 +77,7 @@ def labs():
 @lab2.route('/lab2/filters')
 def filters():
     phrase = "О <b>сколько</b> нам <u>открытий</u> <i>чудных...</i>"
-    return render_template('filter.html', phrase = phrase)
+    return render_template('lab2/filter.html', phrase = phrase)
 
 
 @lab2.route('/lab2/calc/')
@@ -89,7 +92,7 @@ def calc_one_number(a):
 
 @lab2.route('/lab2/calc/<int:a>/<int:b>')
 def calc(a, b):
-    return render_template('calc.html', a=a, b=b)
+    return render_template('lab2/calc.html', a=a, b=b)
 
 books = [
     {'author': 'Джон Р. Р. Толкин', 'title': 'Властилин колец(сборник)', 'genre': 'Фэнтези', 'pages': 1120},
@@ -107,7 +110,7 @@ books = [
 
 @lab2.route('/lab2/books')
 def books_list():
-    return render_template('books_list.html', books=books)
+    return render_template('lab2/books_list.html', books=books)
 
 films = [
     {
@@ -149,4 +152,4 @@ films = [
 
 @lab2.route('/lab2/films')
 def film_list():
-    return render_template("film_list.html", films=films)
+    return render_template("lab2/film_list.html", films=films)
