@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block lab %} Лабораторная работа 3 {% endblock %}
+
+{% block main %}
+    
+    <h1>Ваш билет</h1>
+    <p>{{ ticket_type }}</p>
+    <p>Итоговая стоимость вашего билета: {{ ticket_price }} рублей</p>
+
+        <div>
+            <a href="/lab3/ticket_registration">Вернуться назад</a>
+        </div>
+    
+
+{% endblock %}

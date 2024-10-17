@@ -99,3 +99,35 @@ def settings():
 
     return make_response(render_template('lab3/settings.html', color=color, 
                                          background=background, size=size, font_style=font_style))
+
+
+@lab3.route('/lab3/ticket_registration')
+def ticket_registration():
+    return render_template('lab3/ticket_registration.html')
+
+
+@lab3.route('/lab3/ticket')
+def ticket():
+    age = int(request.args.get('age'))
+    ticket_price = 0
+    if age < 18:
+        ticket_type = 'Детский билет'
+        ticket_price = 700  
+    else:
+        ticket_type = 'Взрослый билет'
+        ticket_price = 1000  
+
+    shelf = request.args.get('shelf')
+    if shelf in ['bottom-shelf', 'lower-side']:
+        ticket_price += 100  
+
+    if request.args.get('linen') == 'on':
+        ticket_price += 75  
+
+    if request.args.get('baggage') == 'on':
+        ticket_price += 250 
+
+    if request.args.get('insurance') == 'on':
+        ticket_price += 150 
+
+    return render_template ('lab3/ticket.html', ticket_price=ticket_price, ticket_type=ticket_type)
