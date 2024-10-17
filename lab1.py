@@ -36,7 +36,7 @@ def lab():
             &copy; Дарья Александровна Дыбалина, ФБИ-23, 3 курс, 2024
         </footer>
 
-        <link rel='stylesheet' href = "''' + url_for('static', filename='important.css') + '''">
+        <link rel='stylesheet' href = "''' + url_for('static', filename='lab1/important.css') + '''">
     </body>
 </html>
 '''
@@ -56,9 +56,9 @@ def student():
         </header>
         <h1>Дыбалина Дарья Александровна</h1>
         <div class="student">
-            <img src="''' + url_for('static', filename='nstu.png') + '''", width='700px'>
+            <img src="''' + url_for('static', filename='lab1/nstu.png') + '''", width='700px'>
         </div>
-        <link rel='stylesheet' href = "''' + url_for('static', filename='important.css') + '''">
+        <link rel='stylesheet' href = "''' + url_for('static', filename='lab1/important.css') + '''">
 
         <footer>
             &copy; Дарья Александровна Дыбалина, ФБИ-23, 3 курс, 2024
@@ -136,9 +136,9 @@ def python():
         </footer>
 
         <div class="python">
-            <img src="''' + url_for('static', filename='python.jpg') + '''", width="500px">
+            <img src="''' + url_for('static', filename='lab1/python.jpg') + '''", width="500px">
         </div>
-        <link rel='stylesheet' href = "''' + url_for('static', filename='important.css') + '''">
+        <link rel='stylesheet' href = "''' + url_for('static', filename='lab1/important.css') + '''">
     </body>
 </html>
 '''
@@ -158,9 +158,9 @@ def oak():
         </header>
         <h1>Дуб</h1>
         <div class="oak">
-            <img src="''' + url_for('static', filename='oak.jpg') + '''">
+            <img src="''' + url_for('static', filename='lab1/oak.jpg') + '''">
         </div>
-        <link rel='stylesheet' href = "''' + url_for('static', filename='important.css') + '''">
+        <link rel='stylesheet' href = "''' + url_for('static', filename='lab1/important.css') + '''">
         <footer>
             &copy; Дарья Александровна Дыбалина, ФБИ-23, 3 курс, 2024
         </footer>
@@ -194,27 +194,27 @@ def cats():
 
         <p>Тогда, уж поверьте, "кошачий демон" устроит свой тыгыдык прямо на Вашем безмятежно спящем теле. Или упадет на Вас. Случайно. Со шкафа. Несколько раз. И еще разок>
         <div class="cat">
-            <img src="''' + url_for('static', filename='cat.jpg') + '''", width='500px'>
+            <img src="''' + url_for('static', filename='lab1/cat.jpg') + '''", width='500px'>
         </div>
 
         <p><b>Причина 2. Не устал.</b>
         <p>Вашей кошке просто некуда выплескивать энергию! Возможно, еще и вашего внимания не хватает.
         Наши кисы большую часть дня просто бессовестно спят или лежат в причудливых позах.
         <div class="tired">
-            <img src="''' + url_for('static', filename='tired.png') + '''", height='300px'>
+            <img src="''' + url_for('static', filename='lab1/tired.png') + '''", height='300px'>
         </div>
 
         <p><b>Причина 3. Гулянка!</b>
         <p>Если кошка или кот "гуляют", находятся "в охоте", у них "весеннее обострение" - 
         ночные тыгыдыки могут участиться и усилиться. Держись дом и его обитатели
         <div class="night">
-            <img src="''' + url_for('static', filename='night.jpg') + '''", width='500px'>
+            <img src="''' + url_for('static', filename='lab1/night.jpg') + '''", width='500px'>
         </div>
         <div class="mycat">
-            <img src="''' + url_for('static', filename='mycat.jpg') + '''", height='450px'>
+            <img src="''' + url_for('static', filename='lab1/mycat.jpg') + '''", height='450px'>
         </div>
 
-        <link rel='stylesheet' href = "''' + url_for('static', filename='important.css') + '''">
+        <link rel='stylesheet' href = "''' + url_for('static', filename='lab1/important.css') + '''">
         <footer>
             &copy; Дарья Александровна Дыбалина, ФБИ-23, 3 курс, 2024
         </footer>
