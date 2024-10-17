@@ -23,7 +23,7 @@ def menu():
         <title>НГТУ, ФБ, Лабораторные работы</title>
     </head>
     <body>
-        <link rel='stylesheet' href = "''' + url_for('static', filename='important.css') + '''">
+        <link rel='stylesheet' href = "''' + url_for('static', filename='lab1/important.css') + '''">
         <header>
             НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных
         </header>
