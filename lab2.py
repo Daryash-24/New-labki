@@ -24,17 +24,19 @@ def all_flowers():
     return render_template('all_flowers.html', flowers=flower_list)
 
 
-@lab2.route('/lab2/add_flower/<string:flower_name>/<int:flower_price>')
-def add_flower(flower_name, flower_price):
-    flower_list.lab2end({'name': flower_name, 'price': flower_price})
-    return redirect(url_for('all_flowers'))
+@lab2.route('/lab2/add_flower', methods=['POST'])
+def add_flower():
+    name = request.form['flower_name']
+    price = request.form['flower_price']
+    flower_list.append({"name": name, "price": price}) 
+    return redirect(url_for('lab2.all_flowers')) 
 
 
 @lab2.route('/lab2/delete_flower/<int:flower_index>')
 def delete_flower(flower_index):
     if 0 <= flower_index < len(flower_list):
         del flower_list[flower_index]
-        return redirect(url_for('all_flowers'))
+        return redirect(url_for('lab2.all_flowers'))
     else:
         abort(404)
 
@@ -43,7 +45,7 @@ def delete_flower(flower_index):
 def clear_flowers():
     global flower_list
     flower_list = []
-    return redirect(url_for('all_flowers'))
+    return redirect(url_for('lab2.all_flowers'))
 
 
 @lab2.route('/lab2/example')
@@ -77,12 +79,12 @@ def filters():
 
 @lab2.route('/lab2/calc/')
 def calc_default():
-    return redirect(url_for('calc', a=1, b=1))
+    return redirect(url_for('lab2.calc', a=1, b=1))
 
 
 @lab2.route('/lab2/calc/<int:a>')
 def calc_one_number(a):
-    return redirect(url_for('calc', a=a, b=1))
+    return redirect(url_for('lab2.calc', a=a, b=1))
 
 
 @lab2.route('/lab2/calc/<int:a>/<int:b>')
@@ -110,14 +112,14 @@ def books_list():
 films = [
     {
         "name": "Интерстеллар",
-        "image": "/static/inter.jpg",
+        "image": "/static/lab2/inter.jpg",
         "description": "Фильм Интерстеллар (Interstellar) — это научно-фантастическая драма,"
         "которая оставляет зрителя задумчивым и проникает в самые глубины его сознания. "
         "Режиссер Кристофер Нолан создал шедевр, который заслуживает внимания и обязательно стоит посмотреть. "
     },
     {
         "name": "Начало",
-        "image": "/static/incep.jpg",
+        "image": "/static/lab2/incep.jpg",
         "description": "Несмотря на достаточно сложносочиненный сюжет, затрагивающий темы человеческого бессознательного "
         "и манипуляций над ним, «Начало» остается ярким примером тождественности гениальности и простоты, которая в свое "
         "время была воспета классиками философской науки в лице Евклида, Да Винчи. В «Начале» много визуальной и диалоговой "
@@ -125,20 +127,20 @@ films = [
     },
     {
         "name": "Время",
-        "image": "/static/time.jpg",
+        "image": "/static/lab2/time.jpg",
         "description": "Неординарный сюжет  заставляет задуматься о многих ценностях. Как мы зачастую тратим  время на пустые разговоры "
         "с людьми,которые нам совсем неинтересны. На жизнь в социальных сетях, залипая в экраны телефонов, не замечаем, как пролетают секунды, "
         "минуты, часы. Тратим бесценное время своей жизни на решение чужих вопросов, отодвигая свои дела на потом, не можем сказать людям: «Нет»."
     },
     {
         "name": "Хроники Нарнии: Принц Каспиан",
-        "image": "/static/narnia.jpg",
+        "image": "/static/lab2/narnia.jpg",
         "description": "Хроники Нарнии» оставили след в моей памяти, как цикл фильмов о, продуманном до нЕльзя, вымышленном мире: "
         "со своими героями, порядками и укладом жизни. Сродни миру «Гарри Поттера» или, скажем, «Властелина колец». "
     },
     {
         "name": "Кто я?",
-        "image": "/static/who.jpg",
+        "image": "/static/lab2/who.jpg",
         "description": "Кто я? — это фильм, который вдохновляет нас на то, чтобы стать лучше, чтобы быть честными с "
         "самими собой, чтобы не бояться идти против течения."
     }

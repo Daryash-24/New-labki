@@ -54,7 +54,7 @@ form input[type="submit"] {
         <p>Всего цветов: {{ flowers|length }}</p>
         <a href="/lab2/clear_flowers">Очистить список цветов</a>
         <br>
-        <form method="POST" action="/lab2/add_flower/">
+        <form action="{{ url_for('lab2.add_flower') }}" method="post">
             <label for="flower_name">Название цветка:</label>
             <input type="text" id="flower_name" name="flower_name"><br><br>
             <label for="flower_price">Цена:</label>
