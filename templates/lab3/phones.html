@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 3{% endblock %}
+
+{% block main %}
+<a href="/lab3">Меню 3 лабораторной</a>
+    <h1>Поиск телефонов</h1>
+    <form method="POST" action="/lab3/phones">
+        <label for="min_price">Мин. цена:</label>
+        <input type="number" id="min_price" name="min_price" value="{{min_price or 0}}">
+        <label for="max_price">Макс. цена:</label>
+        <input type="number" id="max_price" name="max_price" value="{{max_price or 100000}}">
+        <button type="submit">Искать</button>
+    </form>
+    <h2>Результаты поиска:</h2>
+    {% if phones %}
+        <ul>
+        {% for phone in phones %}
+            <li>
+                <b>{{ phone.name }}</b>
+                <ul>
+                    <li>Цена: {{ phone.price }}</li>
+                    <li>Бренд: {{ phone.brand }}</li>
+                    <li>Цвет: {{ phone.color }}</li>
+                </ul>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Ничего не найдено.</p>
+    {% endif %}
+
+{% endblock %}

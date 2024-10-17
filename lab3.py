@@ -141,3 +141,46 @@ def ticket():
         ticket_price += 150 
 
     return render_template ('lab3/ticket.html', ticket_price=ticket_price, ticket_type=ticket_type)
+
+
+phones = [
+    {'name': 'iPhone 16 Pro Max', 'price': 1800, 'brand': 'Apple', 'color': 'Space Black'},
+    {'name': 'Samsung Galaxy S23 Ultra', 'price': 1100, 'brand': 'Samsung', 'color': 'Phantom Black'},
+    {'name': 'Google Pixel 7 Pro', 'price': 900, 'brand': 'Google', 'color': 'Obsidian'},
+    {'name': 'iPhone 15 Pro', 'price': 1100, 'brand': 'Apple', 'color': 'Graphite'},
+    {'name': 'Samsung Galaxy S22 Ultra', 'price': 800, 'brand': 'Samsung', 'color': 'Phantom Black'},
+    {'name': 'Google Pixel 6 Pro', 'price': 700, 'brand': 'Google', 'color': 'Sorta Sunny'},
+    {'name': 'iPhone 14 Pro Max', 'price': 900, 'brand': 'Apple', 'color': 'Pacific Blue'},
+    {'name': 'Samsung Galaxy S21 Ultra', 'price': 700, 'brand': 'Samsung', 'color': 'Phantom Black'},
+    {'name': 'Google Pixel 5', 'price': 500, 'brand': 'Google', 'color': 'Sorta Sage'},
+    {'name': 'iPhone 13 Pro Max', 'price': 800, 'brand': 'Apple', 'color': 'Midnight Green'},
+    {'name': 'Samsung Galaxy S20 Ultra', 'price': 600, 'brand': 'Samsung', 'color': 'Cosmic Gray'},
+    {'name': 'Google Pixel 4 XL', 'price': 400, 'brand': 'Google', 'color': 'Oh So Orange'},
+    {'name': 'iPhone XR', 'price': 400, 'brand': 'Apple', 'color': 'Yellow'},
+    {'name': 'Samsung Galaxy A53 5G', 'price': 400, 'brand': 'Samsung', 'color': 'Awesome Black'},
+    {'name': 'Google Pixel 6a', 'price': 350, 'brand': 'Google', 'color': 'Sage'},
+    {'name': 'iPhone SE (3rd generation)', 'price': 450, 'brand': 'Apple', 'color': 'Midnight'},
+    {'name': 'Samsung Galaxy A33 5G', 'price': 350, 'brand': 'Samsung', 'color': 'Awesome Black'},
+    {'name': 'Google Pixel 6', 'price': 500, 'brand': 'Google', 'color': 'Sorta Seafoam'},
+    {'name': 'iPhone 11', 'price': 400, 'brand': 'Apple', 'color': 'Purple'},
+    {'name': 'Samsung Galaxy A73 5G', 'price': 450, 'brand': 'Samsung', 'color': 'Awesome Gray'},
+    {'name': 'Google Pixel 5a', 'price': 350, 'brand': 'Google', 'color': 'Mostly Black'},
+    {'name': 'iPhone 8 Plus', 'price': 300, 'brand': 'Apple', 'color': 'Gold'},
+    {'name': 'Samsung Galaxy A52 5G', 'price': 300, 'brand': 'Samsung', 'color': 'Awesome Black'},
+    {'name': 'Google Pixel 4a', 'price': 250, 'brand': 'Google', 'color': 'Just Black'}
+]
+
+@lab3.route('/lab3/phones', methods=['GET', 'POST'])
+def phones_page():
+    if request.method == 'POST':
+        min_price = int(request.form.get('min_price', 0))
+        max_price = int(request.form.get('max_price', 100000))
+        filtered_phones = [phone for phone in phones if min_price <= phone['price'] <= max_price]
+        return render_template('lab3/phones.html', phones=filtered_phones, min_price=min_price, max_price=max_price)
+    else:
+        return render_template('lab3/phones.html', phones=phones)
+
+@lab3.route('/lab3/')
+def index():
+    return redirect(url_for('lab3.phones_page'))
+
