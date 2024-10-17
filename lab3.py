@@ -1,4 +1,4 @@
-from flask import Blueprint, template_rendered, render_template, request, make_response, redirect, session
+from flask import Blueprint, template_rendered, render_template, request, make_response, redirect, session, url_for
 lab3 = Blueprint('lab3', __name__)
 
 @lab3.route('/lab3/')
@@ -103,12 +103,12 @@ def settings():
 
 @lab3.route('/lab3/clear_cookies')
 def clear_cookies():
-  resp = make_response(redirect('/lab3/settings'))
-  resp.set_cookie('color', '', expires=0)
-  resp.set_cookie('background', '', expires=0)
-  resp.set_cookie('size', '', expires=0)
-  resp.set_cookie('font-style', '', expires=0)
-  return resp
+    resp = make_response(redirect(url_for('lab3.settings')))
+    resp.set_cookie('color', '', expires=0)
+    resp.set_cookie('background', '', expires=0)
+    resp.set_cookie('size', '', expires=0)
+    resp.set_cookie('font-style', '', expires=0)
+    return resp
 
 
 @lab3.route('/lab3/ticket_registration')
