@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block lab %} Деление чисел {% endblock %}
+{% block lab %} Возведение в степень {% endblock %}
 
 {% block main %}
     {% if error  %}
@@ -8,9 +8,9 @@
     {% elif errors %}
         <p style="color: red;">{{ errors }}</p>
     {% else %}
-    <h1>Деление чисел</h1>
-    {{ x1 }} / {{ x2 }} ={{ result }}
+    <h1>Возведение в степень</h1>
+    {{ x1 }} ** {{ x2 }} ={{ result }}
     {% endif %}
 
-    <div><a href="/lab4/div-form">Назад</a></div>
+    <div><a href="/lab4/deg-form">Назад</a></div>
 {% endblock %}
