@@ -198,3 +198,57 @@ def fridge():
                 message = "Ошибка: введено некорректное значение температуры"
     return render_template('lab4/fridge.html', message=message) 
 
+prices = {
+            'ячмень': 12345,
+            'овёс': 8522,
+            'пшеница': 8722,
+            'рожь': 14111
+        }
+
+@lab4.route('/lab4/seed', methods=['GET', 'POST'])
+def seed():
+    if request.method == 'POST':
+        grain_type = request.form.get('grain-type')
+        weight = request.form.get('weight')
+
+        if not weight:
+            error_message = "Ошибка: Не указан вес."
+            return render_template('lab4/seed.html', error_message=error_message)
+
+    
+        weight = float(weight)
+
+
+        if weight <= 0:
+            error_message = "Ошибка: Вес должен быть больше 0."
+            return render_template('lab4/seed.html', error_message=error_message)
+
+
+        price_per_ton = prices.get(grain_type)
+
+        total_price = weight * price_per_ton
+        discount = 0
+
+        if weight > 500:
+            error_message = "К сожалению, такого объёма сейчас нет в наличии."
+            return render_template('lab4/seed.html', error_message=error_message)
+        elif weight > 50:
+            discount = 0.1 * total_price
+            total_price -= discount
+
+        return render_template(
+            'lab4/seed.html',
+            grain_type=grain_type,
+            weight=weight,
+            total_price=total_price,
+            discount=discount,
+            success_message = (
+                f"Заказ успешно сформирован. Вы заказали {grain_type}.<br>"
+                f"Вес: {weight} т.<br>"
+                f"Сумма к оплате: {total_price:.2f} руб.<br>"
+                f"Применена скидка за большой объём: {discount:.2f} руб."
+            )
+        )
+
+    return render_template('lab4/seed.html')
+
