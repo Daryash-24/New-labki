@@ -150,7 +150,6 @@ def login():
             name = ''
         return render_template('lab4/login.html', authorized=authorized, login=login, name=name)
     
-    # Обработка POST запроса
     login = request.form.get('login')
     password = request.form.get('password')
 
