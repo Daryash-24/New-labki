@@ -124,7 +124,7 @@ def tree():
             tree_count += 1
     return redirect ('/lab4/tree')
 
-users = [
+users_list = [
     {'login': 'darya', 'password': '246', 'name': 'Дарья Дыбалина', 'sex': 'female'},
     {'login': 'dima', 'password': 'grub', 'name': 'Дмитрий Фуфачев', 'sex': 'male'},
     {'login': 'dasha', 'password': '10032002', 'name': 'Дарья Вадрецкая', 'sex': 'female'},
@@ -133,13 +133,13 @@ users = [
     
 ]
 
-@lab4.route('/lab4/login', methods = ['GET', 'POST'])
+@lab4.route('/lab4/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
         if 'login' in session:
             authorized = True
             login = session['login']
-            user = next((user for user in users if user['login'] == login), None)
+            user = next((user for user in users_list if user['login'] == login), None)
             if user:
                 name = user['name']
             else:
@@ -148,8 +148,9 @@ def login():
             authorized = False
             login = ''
             name = ''
-        return render_template('lab4/login.html', authorized = authorized, login = login, name=name)
+        return render_template('lab4/login.html', authorized=authorized, login=login, name=name)
     
+    # Обработка POST запроса
     login = request.form.get('login')
     password = request.form.get('password')
 
@@ -159,13 +160,75 @@ def login():
     elif not password:
         error = 'Не введён пароль'
     else:
-        for user in users:
+        for user in users_list:
             if login == user['login'] and password == user['password']:
                 session['login'] = login
-                return redirect ('/lab4/login')
+                return redirect('/lab4/users')  # Перенаправление на страницу пользователей
         error = 'Неверный логин и/или пароль'
-    return render_template('/lab4/login.html', error = error, authorized = False, login=login)
+    return render_template('lab4/login.html', error=error, authorized=False, login=login)
 
+
+@lab4.route('/lab4/users', methods=['GET', 'POST'])
+def users_list_view():
+    if 'login' not in session:
+        return redirect('/lab4/login')
+
+    current_user_login = session['login']
+    current_user = next((user for user in users_list if user['login'] == current_user_login), None)
+    return render_template('lab4/users.html', users=users_list, current_user=current_user)
+
+@lab4.route('/lab4/delete', methods=['POST'])
+def delete_user():
+    if 'login' not in session:
+        return redirect('/lab4/login')
+
+    current_user_login = session['login']
+    global users_list
+    users_list = [user for user in users_list if user['login'] != current_user_login]
+    session.pop('login', None)  # Завершить сессию
+    return redirect('/lab4/login')
+
+@lab4.route('/lab4/edit', methods=['GET', 'POST'])
+def edit_user():
+    if 'login' not in session:
+        return redirect('/lab4/login')
+
+    current_user_login = session['login']
+    current_user = next((user for user in users_list if user['login'] == current_user_login), None)
+
+    if request.method == 'POST':
+        new_name = request.form.get('name')
+        new_password = request.form.get('password')
+
+        if new_name:
+            current_user['name'] = new_name
+        if new_password:
+            current_user['password'] = new_password
+        
+        return redirect('/lab4/users')
+
+    return render_template('lab4/edit_user.html', user=current_user)
+
+@lab4.route('/lab4/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        login = request.form.get('login')
+        password = request.form.get('password')
+        name = request.form.get('name')
+
+        error = ''
+        if not login or not password or not name:
+            error = 'Все поля обязательны для заполнения.'
+        else:
+            if any(user['login'] == login for user in users_list):
+                error = 'Пользователь с таким логином уже существует.'
+            else:
+                users_list.append({'login': login, 'password': password, 'name': name})
+                return redirect('/lab4/login')
+
+        return render_template('lab4/register.html', error=error)
+
+    return render_template('lab4/register.html')
 
 @lab4.route('/lab4/logout', methods = ['POST'])
 def logout():
@@ -214,10 +277,8 @@ def seed():
         if not weight:
             error_message = "Ошибка: Не указан вес."
             return render_template('lab4/seed.html', error_message=error_message)
-
     
         weight = float(weight)
-
 
         if weight <= 0:
             error_message = "Ошибка: Вес должен быть больше 0."
