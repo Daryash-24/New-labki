@@ -4,14 +4,6 @@
 
 {% block main %}
 <style>
-.baza{
-    background-color: #c8e9f7;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    text-align: center; 
-    width: 100%; 
-    }
 
 body {
     background-color: whitesmoke;
@@ -56,14 +48,10 @@ button{
 }
     
 </style>
-    <h1>База знаний</h1>
     
-        <div class="baza">
-            <button><a href="/lab5/list" style="color: #1f3b47;">Список статей</a></button>
-            <button><a href="/lab5/create" style="color: #1f3b47;">Создать статью</a></button>
-            <button><a href="/lab5/login" style="color: #1f3b47;">Войти</a></button>
-            <button><a href="/lab5/register" style="color: #1f3b47;">Регистрация</a></button>
-        </div>
-    
+<h1>Регистрация прошла успешно!</h1>
+
+    <p>Теперь вы можете войти в систему и пользоваться базой знаний.</p>
+    <a href="/lab5">Перейти на главную страницу</a>
 
 {% endblock %}
