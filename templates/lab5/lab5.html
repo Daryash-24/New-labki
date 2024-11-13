@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block lab %} Лабораторная работа 5 {% endblock %}
+
+{% block main %}
+<style>
+    .baza{
+        background-color: #f0f0f0;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center; 
+        width: 100%; 
+    }
+    
+</style>
+    <h1>База знаний</h1>
+    <ol>
+        <div class="baza">
+            <button><a href="/lab5/list" style="color: white;">Список статей</a></button>
+            <button><a href="/lab5/create" style="color: white;">Создать статью</a></button>
+            <button><a href="/lab5/login" style="color: white;">Войти</a></button>
+            <button><a href="/lab5/register" style="color: white;">Регистрация</a></button>
+        </div>
+    </ol>
+
+{% endblock %}
