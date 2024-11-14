@@ -17,25 +17,37 @@ def register():
 
     if not (login and password):
         return render_template('lab5/register.html', error='Заполните все поля')
-    
-    conn = psycopg2.connect(
-        host = '127.0.0.1',
-        database = 'webka',
-        user = 'postgres',
-        password = 'postgres'
-    )
-    cur = conn.cursor()
 
-    cur.execute(f"SELECT login FROM users WHERE login='{login}';")
-    if cur.fetchone():
-        cur.close()
-        conn.close()
-        return render_template('lab5/register.html', error = 'Такой пользователь уже существует')
-    
-    cur.execute(f"INSERT INTO users (login, password) VALUES ('{login}', '{password}');")
-    conn.commit()
-    cur.close()
-    conn.close()
-    return render_template('lab5/success.html', login = login)
+    conn = None
+    cur = None
 
+    try:
+        conn = psycopg2.connect(dbname="webka", user="postgres", password="postgres", host="127.0.0.1", options="-c client_encoding=UTF8")
+        cur = conn.cursor()
 
+        # Используйте параметризацию запросов для предотвращения SQL-инъекций
+        cur.execute("SELECT login FROM users WHERE login=%s;", (login,))
+        if cur.fetchone():
+            return render_template('lab5/register.html', error='Такой пользователь уже существует')
+
+        # Хешируйте пароль перед сохранением
+        cur.execute("INSERT INTO users (login, password) VALUES (%s, %s);", (login))
+        conn.commit()
+
+    except Exception as e:
+        # Логирование ошибки
+        print(f"Error: {e}")
+        return render_template('lab5/register.html', error='Произошла ошибка при регистрации. Попробуйте позже.')
+
+    finally:
+        # Закрываем соединение с базой данных, если оно было открыто
+        if cur:
+            cur.close()
+        if conn:
+            conn.close()
+
+    return render_template('lab5/success.html', login=login)
+
+@lab5.route('/lab5/success')
+def success():
+    return render_template('/lab5/success.html')
