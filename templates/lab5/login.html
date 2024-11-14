@@ -4,12 +4,6 @@
 
 {% block main %}
 <style>
-.baza h3 {
-    float: right;
-    margin-right: 20px;
-    font-size: 20px;
-    padding: 5px;
-    }
 .baza{
     background-color: #c8e9f7;
     padding: 20px;
@@ -62,23 +56,29 @@ button{
 }
     
 </style>
-    <h1>База знаний</h1>
+    <h1>Вход в систему</h1>
     
-        <div class="baza">
-            <button><a href="/lab5/list" style="color: #1f3b47;">Список статей</a></button>
-            <button><a href="/lab5/create" style="color: #1f3b47;">Создать статью</a></button>
-            <button><a href="/lab5/login" style="color: #1f3b47;">Войти</a></button>
-            <button><a href="/lab5/register" style="color: #1f3b47;">Регистрация</a></button>
-            {% if user %}
+    {% if error %}
 
-                <h3>{{ user }}</h3>
+        <p class="error">{{ error }}</p>
 
-            {% else %}
+    {% endif %}
 
-                <h3>Anonymous</h3>
-
-            {% endif %}
+    <form action="/lab5/login" method="post">
+        <div>
+            <label>
+                Логин: <input type="text" name="login">
+            </label>
         </div>
+
+        <div>
+            <label>
+                Пароль: <input type="password" name="password">
+            </label>
+        </div>
+
+        <button type="submit">Вход</button>
+    </form>
     
 
 {% endblock %}
