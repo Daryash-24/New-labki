@@ -12,7 +12,9 @@ app.register_blueprint(lab3)
 app.register_blueprint(lab4)
 app.register_blueprint(lab5)
 
-app.secret_key = 'сила в любви' 
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'сила в любви')
+app.config['DB_TYPE'] = os.getenv('DB_TYPE', 'postgres')
+
 
 @app.route("/")
 @app.route("/index")
