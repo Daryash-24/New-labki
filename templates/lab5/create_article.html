@@ -58,6 +58,10 @@ button{
 </style>
     
 <h1>Создать статью</h1>
+    {% if error %}
+        <div style="color: red;">{{ error }}</div>
+    {% endif %}
+
 <form method="POST">
 
     <label for="title">
@@ -70,6 +74,7 @@ button{
 
     
     <button type="submit">Создать статью</button>
+    <p><a href="/lab5/" style="vertical-align: bottom;"> Назад к базе знаний!</a></p>
 </form>
 
 {% endblock %}

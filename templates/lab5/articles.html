@@ -59,9 +59,19 @@ button{
     
 <h1>Статьи</h1>
 
-{% for article in articles %}
-    <h2>{{ article['title']  }}</h2>
-    <blockquote>{{ article['article_text'] }}</blockquote>
-{% endfor %}
-
+{% if has_articles %}
+        {% for article in articles %}
+            <h2>{{ article['title'] }}</h2>
+            <blockquote>{{ article['article_text'] }}</blockquote>
+            <a href="{{ url_for('lab5.edit_article', article_id=article['id']) }}">Редактировать</a>
+            <form action="{{ url_for('lab5.delete_article', article_id=article['id']) }}" method="POST" style="display:inline;">
+                <button type="submit">Удалить</button>
+            </form>
+            
+        {% endfor %}
+    {% else %}
+        <p>У вас нет ни одной статьи.</p>
+        <button><a href="/lab5/create">Создайте свою первую статью!</a></button>
+    {% endif %}
+            <p><a href="/lab5/" style="vertical-align: bottom;"> Назад к базе знаний!</a></p>
 {% endblock %}
