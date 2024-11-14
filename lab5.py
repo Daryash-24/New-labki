@@ -8,6 +8,17 @@ lab5 = Blueprint('lab5', __name__)
 def lab():
     return render_template('/lab5/lab5.html', user = session.get('login'))
 
+def db_connect():
+    conn = psycopg2.connect(dbname="webka", user="postgres", password="postgres", host="127.0.0.1", options="-c client_encoding=UTF8")
+    cur = conn.cursor(cursor_factory = RealDictCursor)
+
+    return conn, cur
+
+def db_close(conn, cur):
+    conn.commit()
+    cur.close()
+    conn.close()
+
 @lab5.route('/lab5/register', methods = ['POST', 'GET'])
 def register():
     if request.method == 'GET':
@@ -19,21 +30,17 @@ def register():
     if not (login and password):
         return render_template('lab5/register.html', error='Заполните все поля')
 
-    conn = psycopg2.connect(dbname="webka", user="postgres", password="postgres", host="127.0.0.1", options="-c client_encoding=UTF8")
-    cur = conn.cursor()
+    conn, cur = db_connect()
 
   # Используйте параметризованный запрос для проверки наличия пользователя
     cur.execute("SELECT login FROM users WHERE login=%s", (login,))
     if cur.fetchone():
-        cur.close()
-        conn.close()
+        db_close(conn, cur)
         return render_template('lab5/register.html', error = 'Такой пользователь уже существует')
 
   # Используйте параметризованный запрос для вставки данных
     cur.execute("INSERT INTO users (login, password) VALUES (%s, %s)", (login, password))
-    conn.commit()
-    cur.close()
-    conn.close()
+    db_close(conn, cur)
     return render_template('lab5/success.html', login = login)
 
 
@@ -53,23 +60,20 @@ def login():
     if not (login or password):
         return render_template ('lab5/login.html', error = 'Заполните поля')
     
-    conn = psycopg2.connect(dbname="webka", user="postgres", password="postgres", host="127.0.0.1", options="-c client_encoding=UTF8")
+    conn, cur = db_connect()
     cur = conn.cursor(cursor_factory = RealDictCursor)
 
     cur.execute(f"SELECT * FROM users WHERE login ='{login}';")
     user = cur.fetchone()
 
     if not user:
-        cur.close()
-        conn.close()
+        db_close(conn, cur)
         return render_template ('lab5/login.html', error = 'Логин и/или пароль неверны')
     
     if user['password'] != password:
-        cur.close()
-        conn.close()
+        db_close(conn, cur)
         return render_template ('lab5/login.html', error = 'Логин и/или пароль неверны')
 
     session['login'] = login
-    cur.close()
-    conn.close()
+    db_close(conn, cur)
     return render_template ('lab5/success_login.html', login = login)
