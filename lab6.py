@@ -46,7 +46,7 @@ def register():
     
     login = request.form.get('login')
     password = request.form.get('password')
-    
+
     if not (login and password):
         return render_template('lab6/register.html', error='Заполните все поля')
     conn, cur = db_connect()
@@ -137,7 +137,36 @@ def api():
                     'result': 'success',
                     'id': data.get('id')
                 }
-    
+            
+    if data['method'] == 'cancellation':
+        office_number = data['params']
+        for office in offices:
+            if office['number'] == office_number:
+                if office['tenant'] == '':
+                    return {
+                        'jsonrpc': '2.0',
+                        'error': {
+                            'code': 3,
+                            'message': 'Офис не забронирован'
+                        },
+                        'id': data.get('id')
+                    }
+                if office['tenant'] != login:
+                    return {
+                        'jsonrpc': '2.0',
+                        'error': {
+                            'code': 4,
+                            'message': 'Вы не можете отменить чужое бронирование.'
+                        },
+                        'id': data.get('id')
+                    }
+                office['tenant'] = ''
+                return {
+                    'jsonrpc': '2.0',
+                    'result': 'success',
+                    'id': data.get('id')
+                }
+
     return {
         'jsonrpc': '2.0',
         'error': {
