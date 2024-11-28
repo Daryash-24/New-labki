@@ -8,8 +8,10 @@ from os import path
 lab6 = Blueprint('lab6', __name__)
 
 offices = []
+price_per_office = 1000  
 for i in range(1, 11):
-    offices.append({'number': i, 'tenant': ''})
+    offices.append({'number': i, 'tenant': '', 'price': price_per_office})
+
 
 def db_connect():
     if current_app.config['DB_TYPE'] == 'postgres':
@@ -37,7 +39,7 @@ def home():
 @lab6.route('/lab6/')
 def lab():
     username = session.get('login', '')
-    return render_template('lab6/lab6.html', login=session.get('login'), username=username)
+    return render_template('lab6/lab6.html', login=session.get('login'), username=username, offices=offices)
 
 @lab6.route('/lab6/register', methods=['GET', 'POST'])
 def register():
@@ -99,82 +101,96 @@ def logout():
 
 @lab6.route('/lab6/json-rpc-api/', methods = ['POST'])
 def api():
-    data = request.json
-    if data['method'] == 'info':
-        return {
-            'jsonrpc': '2.0',
-            'result': offices,
-            'id': data.get('id')
-        }
-    
-    login = session.get('login')
-    if not login:
+    try:
+        data = request.json
+        if data is None:
+            return {'jsonrpc': '2.0', 'error': {'code': -32700, 'message': 'Parse error'}}, 400
+
+        if data['method'] == 'info':
+            conn, cur = db_connect()
+            cur.execute("SELECT * FROM offices")
+            offices_db = cur.fetchall()
+            db_close(conn, cur)
+            return {
+                'jsonrpc': '2.0',
+                'result': [{'number': office['number'], 'tenant': office['tenant'], 'price': office['price']} for office in offices_db],
+                'id': data.get('id')
+            }
+        
+        login = session.get('login')
+        if not login:
+            return {
+                'jsonrpc': '2.0',
+                'error': {
+                    'code': 1, 
+                    'message': 'Unauthorized'
+                },
+                'id': data.get('id')
+            }
+
+        if data['method'] == 'booking':
+            office_number = data['params']
+            conn, cur = db_connect()
+            cur.execute("SELECT * FROM offices WHERE number = ?", (office_number,))
+            office_db = cur.fetchone()
+            if office_db and office_db['tenant'] != '':
+                db_close(conn, cur)
+                return {
+                    'jsonrpc': '2.0',
+                    'error': {
+                        'code': 2,
+                        'message': 'Already booked'
+                    },
+                    'id': data.get('id')
+                }
+            cur.execute("UPDATE offices SET tenant = ? WHERE number = ?", (login, office_number))
+            db_close(conn, cur)
+            return {
+                'jsonrpc': '2.0',
+                'result': 'success',
+                'id': data.get('id')
+            }
+            
+        if data['method'] == 'cancellation':
+            office_number = data['params']
+            conn, cur = db_connect()
+            cur.execute("SELECT * FROM offices WHERE number = ?", (office_number,))
+            office_db = cur.fetchone()
+            if office_db and office_db['tenant'] == '':
+                db_close(conn, cur)
+                return {
+                    'jsonrpc': '2.0',
+                    'error': {
+                        'code': 3,
+                        'message': 'Офис не забронирован'
+                    },
+                    'id': data.get('id')
+                }
+            if office_db and office_db['tenant'] != login:
+                db_close(conn, cur)
+                return {
+                    'jsonrpc': '2.0',
+                    'error': {
+                        'code': 4,
+                        'message': 'Вы не можете отменить чужое бронирование.'
+                    },
+                    'id': data.get('id')
+                }
+            cur.execute("UPDATE offices SET tenant = NULL WHERE number = ?", (office_number,))
+            db_close(conn, cur)
+            return {
+                'jsonrpc': '2.0',
+                'result': 'success',
+                'id': data.get('id')
+            }
+
         return {
             'jsonrpc': '2.0',
             'error': {
-                'code': 1, 
-                'message': 'Unauthorized'
+                'code': -32601,
+                'message': 'Method not found'
             },
             'id': data.get('id')
         }
-    
-    if data['method'] == 'booking':
-        office_number = data['params']
-        for office in offices:
-            if office['number'] == office_number:
-                if office['tenant'] != '':
-                    return {
-                        'jsonrpc': '2.0',
-                        'error': {
-                            'code': 2,
-                            'message': 'Already booked'
-                        },
-                        'id': data.get('id')
-                    }
-                office['tenant'] = login
-                return {
-                    'jsonrpc': '2.0',
-                    'result': 'success',
-                    'id': data.get('id')
-                }
-            
-    if data['method'] == 'cancellation':
-        office_number = data['params']
-        for office in offices:
-            if office['number'] == office_number:
-                if office['tenant'] == '':
-                    return {
-                        'jsonrpc': '2.0',
-                        'error': {
-                            'code': 3,
-                            'message': 'Офис не забронирован'
-                        },
-                        'id': data.get('id')
-                    }
-                if office['tenant'] != login:
-                    return {
-                        'jsonrpc': '2.0',
-                        'error': {
-                            'code': 4,
-                            'message': 'Вы не можете отменить чужое бронирование.'
-                        },
-                        'id': data.get('id')
-                    }
-                office['tenant'] = ''
-                return {
-                    'jsonrpc': '2.0',
-                    'result': 'success',
-                    'id': data.get('id')
-                }
-
-    return {
-        'jsonrpc': '2.0',
-        'error': {
-            'code': -32601,
-            'message': 'Method not found'
-        },
-        'id': data.get('id')
-    }
-
-
-
+    except Exception as e:
+        return {'jsonrpc': '2.0', 'error': {'code': -32603, 'message': str(e)}}, 500

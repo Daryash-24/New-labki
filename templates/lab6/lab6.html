@@ -23,10 +23,11 @@
             const office_list = data.result;
             const ul = document.getElementById('office-list');
             ul.innerHTML = '';
+            let totalCost = 0;
             for (let i = 0; i < office_list.length; i++) {  
                 const office = office_list[i];
                 const li = document.createElement('li');
-                li.innerText = `${office.number}: ${office.tenant || 'Свободен'}`;
+                li.innerText = `Офис ${office.number}: ${office.tenant || 'Свободен'}, Стоимость аренды: ${office.price} руб.`;
 
                 const bookingButton = document.createElement('button');
                 bookingButton.innerText = 'Забронировать';
@@ -38,10 +39,15 @@
                     cancelButton.innerText = 'Освободить';
                     cancelButton.onclick = function() { cancellation(office.number); };
                     li.appendChild(cancelButton);
+                    totalCost += office.price;
                 }
 
                 ul.appendChild(li);
             }
+
+            const totalCostElement = document.getElementById('total-cost');
+            totalCostElement.innerText = `Общая стоимость аренды: ${totalCost} руб.`;
+
         })
         .catch(function(error) {
             console.error('Ошибка:', error);
@@ -127,66 +133,76 @@
         getOfficeList();
     });
 
-    document.getElementById('register-form').addEventListener('submit', function(event) {
-        event.preventDefault();
-        const formData = new FormData(event.target);
-        const data = {
-            username: formData.get('username'),
-            password: formData.get('password')
-        };
-    
-        fetch('/lab6/register', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(data)
- })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Регистрация успешна');
-            } else {
-                alert('Ошибка: ' + data.error);
-            }
+    const registerForm = document.getElementById('register-form');
+    if (registerForm) {
+        registerForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = {
+                login: formData.get('login'),
+                password: formData.get('password')
+            };
+
+            sendJsonRequest('register', data); // Отправляем JSON-запрос
         });
-    });
+    }
     
-    document.getElementById('login-form').addEventListener('submit', function(event) {
-        event.preventDefault();
-        const formData = new FormData(event.target);
-        const data = {
-            username: formData.get('username'),
-            password: formData.get('password')
+    const loginForm = document.getElementById('login-form');
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = {
+                login: formData.get('login'),
+                password: formData.get('password')
+            };
+
+            sendJsonRequest('login', data); // Отправляем JSON-запрос
+        });
+    }
+
+    function sendJsonRequest(method, params) {
+        const url = '/lab6/json-rpc-api/';
+        const json = {
+            'jsonrpc': '2.0',
+            'method': method,
+            'params': params,
+            'id': Math.round(Math.random() * 1000)
         };
-    
-        fetch('/lab6/login', {
+        fetch(url, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(data)
+            body: JSON.stringify(json)
         })
         .then(response => response.json())
         .then(data => {
-            if (data.success) {
-                alert('Вход успешен');
-                location.reload(); 
+            if (data.error) {
+                alert('Ошибка: ' + data.error.message);
             } else {
-                alert('Ошибка: ' + data.error);
+                if (method === 'register') {
+                    alert('Регистрация успешна');
+                } else if (method === 'login') {
+                    alert('Вход успешен');
+                    location.reload(); 
+                }
             }
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
         });
-    });
+    }
+
 </script>
 {% endblock %}
 
 {% block main %}
+
     <h1>Список кабинетов</h1>
     <h1>Добро пожаловать, {{ login }}!</h1>
     <a href="{{ url_for('lab6.login') }}" class="btn btn-primary">Войти</a>
     <a href="{{ url_for('lab6.logout') }}">Выйти</a>
     <h2>Список офисов</h2>
-    <ul>
-        {% for office in offices %}
-            <li>Офис {{ office.number }} - Арендатор: {{ office.tenant }}</li>
-        {% endfor %}
-    </ul>
     <ul id="office-list"></ul>
-
+    <h3 id="total-cost">Общая стоимость аренды: 0 руб.</h3>
+    
 {% endblock %}
