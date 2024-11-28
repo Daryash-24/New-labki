@@ -30,9 +30,72 @@ def db_close(conn, cur):
     cur.close()
     conn.close()
 
+@lab6.route('/')
+def home():
+    return redirect(url_for('lab6.lab'))
+
 @lab6.route('/lab6/')
 def lab():
-    return render_template('lab6/lab6.html')
+    username = session.get('login', '')
+    return render_template('lab6/lab6.html', login=session.get('login'), username=username)
+
+@lab6.route('/lab6/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'GET':
+        return render_template('lab6/register.html')
+    
+    login = request.form.get('login')
+    password = request.form.get('password')
+    
+    if not (login and password):
+        return render_template('lab6/register.html', error='Заполните все поля')
+    conn, cur = db_connect()
+
+    if current_app.config['DB_TYPE'] == 'postgres':
+        cur.execute("SELECT login FROM users WHERE login=%s;", (login,))
+    else:
+        cur.execute("SELECT login FROM users WHERE login=?;", (login,))
+    if cur.fetchone():
+        db_close(conn, cur)
+        return render_template('lab6/register.html', error="Такой пользователь уже существует")
+    password_hash = generate_password_hash(password)
+
+    if current_app.config['DB_TYPE'] == 'postgres':
+        cur.execute("INSERT INTO users (login, password) VALUES (%s, %s);", (login, password_hash))
+    else:
+        cur.execute("INSERT INTO users (login, password) VALUES (?, ?);", (login, password_hash))
+    db_close(conn, cur)
+    return render_template('lab6/success.html', login=login)
+
+
+@lab6.route('/lab6/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('lab6/login.html')
+    login = request.form.get('login')
+    password = request.form.get('password')
+    if not (login and password):
+        return render_template('lab6/login.html', error="Заполните поля")
+    conn, cur = db_connect()
+
+    if current_app.config['DB_TYPE'] == 'postgres':
+        cur.execute("SELECT * FROM users WHERE login=%s;", (login,))
+    else:
+        cur.execute("SELECT * FROM users WHERE login=?;", (login,))
+    user = cur.fetchone()
+    if not user or not check_password_hash(user['password'], password):
+        db_close(conn, cur)
+        return render_template('lab6/login.html', error='Логин и/или пароль неверны')
+    session['login'] = login  
+    db_close(conn, cur)
+    return redirect(url_for('lab6.lab'))
+
+
+@lab6.route('/lab6/logout')
+def logout():
+    session.pop('login', None) 
+    return redirect(url_for('lab6.lab'))
+
 
 @lab6.route('/lab6/json-rpc-api/', methods = ['POST'])
 def api():

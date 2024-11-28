@@ -80,11 +80,67 @@
     document.addEventListener('DOMContentLoaded', function() {
         getOfficeList();
     });
+
+    document.getElementById('register-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const data = {
+            username: formData.get('username'),
+            password: formData.get('password')
+        };
+    
+        fetch('/lab6/register', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Регистрация успешна');
+            } else {
+                alert('Ошибка: ' + data.error);
+            }
+        });
+    });
+    
+    document.getElementById('login-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const data = {
+            username: formData.get('username'),
+            password: formData.get('password')
+        };
+    
+        fetch('/lab6/login', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Вход успешен');
+                location.reload(); 
+            } else {
+                alert('Ошибка: ' + data.error);
+            }
+        });
+    });
 </script>
 {% endblock %}
 
 {% block main %}
     <h1>Список кабинетов</h1>
+    <h1>Добро пожаловать, {{ login }}!</h1>
+    <a href="{{ url_for('lab6.login') }}" class="btn btn-primary">Войти</a>
+    <a href="{{ url_for('lab6.logout') }}">Выйти</a>
+    <h2>Список офисов</h2>
+    <ul>
+        {% for office in offices %}
+            <li>Офис {{ office.number }} - Арендатор: {{ office.tenant }}</li>
+        {% endfor %}
+    </ul>
     <ul id="office-list"></ul>
 
 {% endblock %}
