@@ -11,6 +11,7 @@
             'method': 'info',
             'id': Math.round(Math.random() * 1000)
         };
+
         fetch(url, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -22,37 +23,36 @@
         .then(function(data) {
             const office_list = data.result;
             const ul = document.getElementById('office-list');
-            ul.innerHTML = '';
-            let totalCost = 0;
-            for (let i = 0; i < office_list.length; i++) {  
+            ul.innerHTML = ''; // Очистка списка перед добавлением новых элементов
+            let totalCost = 0; // Переменная для хранения общей стоимости аренды
+
+            for (let i = 0; i < office_list.length; i++) {
                 const office = office_list[i];
                 const li = document.createElement('li');
-                li.innerText = `Офис ${office.number}: ${office.tenant || 'Свободен'}, Стоимость аренды: ${office.price} руб.`;
+                li.innerText = `${office.number}: ${office.tenant || 'свободен'} (Цена: ${office.price} руб.)`;
 
                 const bookingButton = document.createElement('button');
                 bookingButton.innerText = 'Забронировать';
-                bookingButton.onclick = function() { booking(office.number); };
+                bookingButton.onclick = function() { booking(office.number) };  // Передаем номер офиса
                 li.appendChild(bookingButton);
 
-                if (office.tenant === '{{ login }}') { 
+                if (office.tenant === '{{ login }}') { // Проверяем, является ли текущий пользователь арендатором
                     const cancelButton = document.createElement('button');
                     cancelButton.innerText = 'Освободить';
-                    cancelButton.onclick = function() { cancellation(office.number); };
+                    cancelButton.onclick = function() { cancelBooking(office.number) };  // Передаем номер офиса
                     li.appendChild(cancelButton);
-                    totalCost += office.price;
+                    totalCost += Number(office.price);
                 }
 
                 ul.appendChild(li);
             }
 
+            // Отображение общей стоимости аренды
             const totalCostElement = document.getElementById('total-cost');
             totalCostElement.innerText = `Общая стоимость аренды: ${totalCost} руб.`;
-
-        })
-        .catch(function(error) {
-            console.error('Ошибка:', error);
         });
     }
+    
 
     function booking(officeNumber) {
         const url = '/lab6/json-rpc-api/';
@@ -85,12 +85,12 @@
                 }
             } else {
                 document.getElementById('office-list').innerHTML = '';
-                getOfficeList();
+                getOfficeList();  // Обновляем список офисов
             }
         });
     }
 
-    function cancellation(officeNumber) {
+    function cancelBooking(officeNumber) {
         const url = '/lab6/json-rpc-api/';
         const json = {
             'jsonrpc': '2.0',
@@ -124,7 +124,7 @@
                 }
             } else {
                 document.getElementById('office-list').innerHTML = '';
-                getOfficeList();
+                getOfficeList();  // Обновляем список офисов
             }
         });
     }
@@ -133,64 +133,52 @@
         getOfficeList();
     });
 
-    const registerForm = document.getElementById('register-form');
-    if (registerForm) {
-        registerForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-            const formData = new FormData(event.target);
-            const data = {
-                login: formData.get('login'),
-                password: formData.get('password')
-            };
-
-            sendJsonRequest('register', data); // Отправляем JSON-запрос
-        });
-    }
-    
-    const loginForm = document.getElementById('login-form');
-    if (loginForm) {
-        loginForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-            const formData = new FormData(event.target);
-            const data = {
-                login: formData.get('login'),
-                password: formData.get('password')
-            };
-
-            sendJsonRequest('login', data); // Отправляем JSON-запрос
-        });
-    }
-
-    function sendJsonRequest(method, params) {
-        const url = '/lab6/json-rpc-api/';
-        const json = {
-            'jsonrpc': '2.0',
-            'method': method,
-            'params': params,
-            'id': Math.round(Math.random() * 1000)
+    document.getElementById('register-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const data = {
+            username: formData.get('username'),
+            password: formData.get('password')
         };
-        fetch(url, {
+
+        fetch('/lab6/register', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(json)
+            body: JSON.stringify(data)
         })
         .then(response => response.json())
         .then(data => {
-            if (data.error) {
-                alert('Ошибка: ' + data.error.message);
+            if (data.success) {
+                alert('Регистрация успешна');
             } else {
-                if (method === 'register') {
-                    alert('Регистрация успешна');
-                } else if (method === 'login') {
-                    alert('Вход успешен');
-                    location.reload(); 
-                }
+                alert('Ошибка: ' + data.error);
             }
-        })
-        .catch(error => {
-            console.error('Ошибка:', error);
         });
-    }
+    });
+
+    document.getElementById('login-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const data = {
+            username: formData.get('username'),
+            password: formData.get('password')
+        };
+
+        fetch('/lab6/login', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Вход успешен');
+                location.reload(); // Перезагрузить страницу для обновления состояния
+            } else {
+                alert('Ошибка: ' + data.error);
+            }
+        });
+    });
 
 </script>
 {% endblock %}
@@ -203,6 +191,6 @@
     <a href="{{ url_for('lab6.logout') }}">Выйти</a>
     <h2>Список офисов</h2>
     <ul id="office-list"></ul>
-    <h3 id="total-cost">Общая стоимость аренды: 0 руб.</h3>
+    <h3 id="total-cost">Общая стоимость аренды: {totalCost} руб.</h3>
     
 {% endblock %}
