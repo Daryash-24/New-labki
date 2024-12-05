@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, url_for, render_template, render_template_string, abort, request, make_response, session,  current_app
+from flask import Blueprint, redirect, url_for, render_template, render_template_string, abort, request, jsonify, session,  current_app
 from functools import wraps
 import psycopg2
 from psycopg2.extras import RealDictCursor
@@ -127,17 +127,44 @@ def logout():
     session.pop('login', None)
     return redirect('/rgz2/') 
 
+@rgz2.route('/rgz2/delete_user', methods=['DELETE'])
+def delete_user():
+    login = session.get('login')
+    if not login:
+        return jsonify({"error": "Unauthorized"}), 403
+
+    conn, cur = db_connect()
+    try:
+        cur.execute("SELECT * FROM users WHERE login = %s;", (login,))
+        user = cur.fetchone()
+
+        if user is None:
+            return jsonify({"error": "User  not found"}), 404
+
+        # Освобождение забронированных ячеек
+        cur.execute("SELECT id FROM storage_cells WHERE username = %s;", (login,))
+        bookings = cur.fetchall()
+        for booking in bookings:
+            cur.execute("UPDATE storage_cells SET is_occupied = FALSE, username = NULL WHERE id = %s;", (booking['id'],))
+
+        # Удаление пользователя
+        cur.execute("DELETE FROM users WHERE login = %s;", (login,))
+        conn.commit()
+        return jsonify({"message": "Пользователь успешно удален и все его бронирования освобождены."}), 200
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return jsonify({"error": "An error occurred"}), 500
+    finally:
+        db_close(conn, cur)
+
 
 @rgz2.route('/rgz2/storage', methods=['GET'])
 def storage():
     conn, cur = db_connect()
     try:
-        # Получаем все ячейки из базы данных
-        if current_app.config['DB_TYPE'] == 'postgres':
-            cur.execute("SELECT * FROM storage_cells;")
-        else:
-            cur.execute("SELECT * FROM storage_cells;")
-
+        # Получаем все ячейки из базы данных, сортируя по id
+        cur.execute("SELECT * FROM storage_cells ORDER BY id;")
         cells = cur.fetchall()
 
         # Подсчитываем количество свободных и занятых ячеек
@@ -155,5 +182,111 @@ def storage():
     finally:
         db_close(conn, cur)
 
+@rgz2.route('/rgz2/booking', methods=['POST'])
+def booking():
+    login = session.get('login')
+    if not login:
+        return "Вы не можете забронировать ячейку, пожалуйста, авторизуйтесь", 403
+
+    cell_id = request.form.get('cell_id')  # Получаем id ячейки из формы
+
+    conn, cur = db_connect()
+    try:
+        # Проверяем, существует ли ячейка
+        cur.execute("SELECT * FROM storage_cells WHERE id = %s;", (cell_id,))
+        cell = cur.fetchone()
+
+        if cell is None:
+            return "Cell not found", 404
+
+        # Проверяем, занята ли ячейка
+        if cell['is_occupied']:
+            return "Cell is already booked", 400
+
+        # Проверяем, сколько ячеек уже забронировано пользователем
+        cur.execute("SELECT COUNT(*) FROM storage_cells WHERE username = %s AND is_occupied = TRUE;", (login,))
+        booked_count = cur.fetchone()['count']
+
+        if booked_count >= 5:
+            return "Вы не можете забронировать более 5 ячеек.", 400
+
+        # Бронирование ячейки
+        cur.execute("UPDATE storage_cells SET is_occupied = TRUE, username = %s WHERE id = %s;", (login, cell_id))
+        conn.commit()
+        return "Ячейка забронирована!", 200
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return "An error occurred", 500
+    finally:
+        db_close(conn, cur)
 
 
+@rgz2.route('/rgz2/cancellation', methods=['POST'])
+def cancellation():
+    login = session.get('login')
+    if not login:
+        return "Unauthorized", 403
+
+    cell_id = request.form.get('cell_id')  # Получаем id ячейки из формы
+
+    conn, cur = db_connect()
+    try:
+        # Проверяем, существует ли ячейка
+        cur.execute("SELECT * FROM storage_cells WHERE id = %s;", (cell_id,))
+        cell = cur.fetchone()
+
+        if cell is None:
+            return "Cell not found", 404
+
+        # Проверяем, занята ли ячейка
+        if not cell['is_occupied']:
+            return "Cell is not booked", 400
+
+        # Проверяем, является ли текущий пользователь владельцем брони
+        if cell['username'] != login:
+            return "Вы не можете снять чужую бронь", 403
+
+        # Отмена бронирования
+        cur.execute("UPDATE storage_cells SET is_occupied = FALSE, username = NULL WHERE id = %s;", (cell_id,))
+        conn.commit()
+        return "Бронь снята!", 200
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return "An error occurred", 500
+    finally:
+        db_close(conn, cur)
+
+@rgz2.route('/rgz2/cells', methods=['GET'])
+def view_cells():
+    conn, cur = db_connect()
+    try:
+        cur.execute("SELECT * FROM storage_cells;")
+        cells = cur.fetchall()
+        return render_template('cells.html', cells=cells)
+    finally:
+        db_close(conn, cur)
+
+@rgz2.route('/rgz2/cell/<int:cell_id>/details', methods=['GET'])
+def get_cell_details(cell_id):
+    conn, cur = db_connect()
+    try:
+        cur.execute("SELECT * FROM storage_cells WHERE id = %s;", (cell_id,))
+        cell = cur.fetchone()
+
+        if cell is None:
+            return jsonify({"error": "Cell not found"}), 404
+
+        # Возвращаем информацию о ячейке, включая имя пользователя, если ячейка занята
+        return jsonify({
+            "id": cell['id'],
+            "is_occupied": cell['is_occupied'],
+            "username": cell['username'] if cell['is_occupied'] else None
+        })
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return jsonify({"error": "An error occurred"}), 500
+    finally:
+        db_close(conn, cur)

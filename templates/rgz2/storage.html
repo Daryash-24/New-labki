@@ -6,42 +6,157 @@
 
 <title>Камеры хранения</title>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
     .grid {
-        display: grid;
-        grid-template-columns: repeat(10, 1fr); /* 10 ячеек в строке */
-        gap: 10px; /* Промежуток между ячейками */
-        margin-left: 60px; /* Отступ слева */
+        padding-left: 50px; /* Увеличьте значение для большего отступа */
     }
     .cell {
-        width: 50px;
-        height: 50px;
-        background-color: lightgray;
+        cursor: pointer;
+        padding: 20px;
         border: 1px solid #ccc;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .occupied {
-        background-color: red; /* Цвет для занятых ячеек */
+        margin: 5px;
+        display: inline-block;
+        width: 80px; /* Задайте ширину для ячеек */
+        text-align: center; /* Центрирование текста */
     }
     .free {
-        background-color: green; /* Цвет для свободных ячеек */
+        background-color: #a8e6cf; /* Цвет для свободных ячеек */
+    }
+    .occupied {
+        background-color: #ff8b94; /* Цвет для занятых ячеек */
+    }
+    .popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        border: 1px solid #ccc;
+        padding: 20px;
+        z-index: 1000;
+        display: none; /* Скрываем всплывающее окно по умолчанию */
+    }
+    .close-btn {
+        cursor: pointer;
+        float: right;
+        font-size: 20px;
+        color: #aaa;
+    }
+    .close-btn:hover {
+        color: black;
     }
 </style>
 
-<h1>Ячейки хранения</h1>
+<h1>Камеры хранения</h1>
 <p>Всего занятых ячеек: {{ total_occupied }}</p>
 <p>Всего свободных ячеек: {{ total_free }}</p>
 
 <div class="grid">
     {% for cell in cells %}
-        <div class="cell {{ 'occupied' if cell.is_occupied else 'free' }}">
-            {{ loop.index }}
+        <div class="cell {{ 'occupied' if cell.is_occupied else 'free' }}" data-cell-id="{{ cell.id }}">
+            Ячейка {{ cell.id }}
         </div>
     {% endfor %}
 </div>
 
-    <p><a href="/rgz2/" style="vertical-align: bottom;"> Назад </a></p>
-    
+<div id="popup" class="popup">
+    <span class="close-btn" onclick="closePopup();">&times;</span>
+    <div id="popup-content" style="color: black;"></div>
+</div>
+
+<script>
+    let bookedCellsCount = 0; // Счетчик забронированных ячеек
+
+    $(document).ready(function() {
+        $('.cell').click(function() {
+            const cellId = $(this).data('cell-id');
+            $.get(`/rgz2/cell/${cellId}/details`, function(data) {
+                let content = `<p>ID ячейки: ${data.id}</p>`;
+                content += `<p>Статус: ${data.is_occupied ? 'Забронирована' : 'Доступна'}</p>`;
+                if (data.is_occupied) {
+                    content += `<p>Забронирована пользоватем: ${data.username}</p>`; // Добавляем информацию о пользователе
+                    content += `<button onclick="cancelBooking(${cellId});">Отменить бронь</button>`;
+                } else {
+                    content += `<button onclick="bookCell(${cellId});">Забронировать</button>`;
+                }
+                $('#popup-content').html(content);
+                $('#popup').show();
+            }).fail(function(xhr) {
+                alert("Ошибка при получении данных: " + xhr.responseText);
+            });
+        });
+    });
+
+        // Закрытие всплывающего окна при клике вне его
+        $(document).click(function(event) {
+            if (!$(event.target).closest('#popup').length && !$(event.target).closest('.cell').length) {
+                closePopup();
+            }
+        });
+
+    function closePopup() {
+        $('#popup').hide();
+    }
+
+    function bookCell(cellId) {
+        if (bookedCellsCount >= 5) {
+            alert("Вы не можете забронировать более 5 ячеек.");
+            closePopup(); // Закрываем всплывающее окно
+            return;
+        }
+
+        $.post('/rgz2/booking', { cell_id: cellId }, function(response) {
+            alert(response);
+            
+            // Обновляем цвет ячейки и статус
+            const cell = $(`.cell[data-cell-id='${cellId}']`);
+            cell.removeClass('free').addClass('occupied'); // Меняем класс на 'occupied'
+            cell.html(`Ячейка ${cellId}`); // Обновляем текст ячейки
+
+            // Обновляем количество занятых и свободных ячеек
+            const totalOccupied = parseInt($('p:contains("Всего занятых ячеек:")').text().match(/\d+/)[0]) + 1;
+            const totalFree = parseInt($('p:contains("Всего свободных ячеек:")').text().match(/\d+/)[0]) - 1;
+
+            $('p:contains("Всего занятых ячеек:")').text(`Всего занятых ячеек: ${totalOccupied}`);
+            $('p:contains("Всего свободных ячеек:")').text(`Всего свободных ячеек: ${totalFree}`);
+
+            bookedCellsCount++; // Увеличиваем счетчик забронированных ячеек
+            closePopup(); // Закрываем всплывающее окно
+
+        }).fail(function(xhr) {
+            alert(xhr.responseText); // Показать сообщение об ошибке
+            closePopup(); // Закрываем всплывающее окно в случае ошибки
+        });
+    }
+
+    function cancelBooking(cellId) {
+        $.post('/rgz2/cancellation', { cell_id: cellId }, function(response) {
+            alert(response);
+            
+            // Обновляем цвет ячейки и статус
+            const cell = $(`.cell[data-cell-id='${cellId}']`);
+            cell.removeClass('occupied').addClass('free'); // Меняем класс на 'free'
+            cell.html(`Ячейка ${cellId}`); // Обновляем текст ячейки
+
+            // Обновляем количество занятых и свободных ячеек
+            const totalOccupied = parseInt($('p:contains("Всего занятых ячеек:")').text().match(/\d+/)[0]) - 1;
+            const totalFree = parseInt($('p:contains("Всего свободных ячеек:")').text().match(/\d+/)[0]) + 1;
+
+            $('p:contains("Всего занятых ячеек:")').text(`Всего занятых ячеек: ${totalOccupied}`);
+            $('p:contains("Всего свободных ячеек:")').text(`Всего свободных ячеек: ${totalFree}`);
+
+            bookedCellsCount--; // Уменьшаем счетчик забронированных ячеек
+            closePopup(); // Закрываем всплывающее окно
+
+        }).fail(function(xhr) {
+            alert(xhr.responseText); // Показать сообщение об ошибке
+            closePopup(); // Закрываем всплывающее окно в случае ошибки
+        });
+    }
+</script>
+
+
+<p><a href="/rgz2/" style="vertical-align: bottom;"> Назад </a></p>
+
 {% endblock %}

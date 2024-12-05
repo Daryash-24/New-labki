@@ -21,7 +21,28 @@
     <a href="/rgz2/register" style="color: #1f3b47;"><button>Регистрация</button></a>
 
     {% if user %}
+        {% block script %}
+        <script>
+            function deleteUser(userId) {
+                if (confirm("Вы уверены, что хотите удалить пользователя?")) {
+                    $.ajax({
+                        type: 'DELETE',
+                        url: '/rgz2/delete_user',
+                        data: { user_id: userId },
+                        success: function(response) {
+                            alert(response);
+                            // Дополнительные действия после удаления пользователя, если необходимо
+                        },
+                        error: function(xhr) {
+                            alert("Ошибка при удалении пользователя: " + xhr.responseText);
+                        }
+                    });
+                }
+            }
+        </script>
+        {% endblock %}
         <a href="/rgz2/logout" style="color: #1f3b47;"><button>Выйти</button></a> 
+        <button onclick="deleteUser ('{{ user }}');">Удалить пользователя</button>
     {% endif %}
     
 
