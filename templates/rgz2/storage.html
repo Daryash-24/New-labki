@@ -1,0 +1,47 @@
+{% extends "rgz_style.html" %}
+
+{% block lab %} Расчетно-графическое задание {% endblock %}
+
+{% block main %}
+
+<title>Камеры хранения</title>
+
+<style>
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(10, 1fr); /* 10 ячеек в строке */
+        gap: 10px; /* Промежуток между ячейками */
+        margin-left: 60px; /* Отступ слева */
+    }
+    .cell {
+        width: 50px;
+        height: 50px;
+        background-color: lightgray;
+        border: 1px solid #ccc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .occupied {
+        background-color: red; /* Цвет для занятых ячеек */
+    }
+    .free {
+        background-color: green; /* Цвет для свободных ячеек */
+    }
+</style>
+
+<h1>Ячейки хранения</h1>
+<p>Всего занятых ячеек: {{ total_occupied }}</p>
+<p>Всего свободных ячеек: {{ total_free }}</p>
+
+<div class="grid">
+    {% for cell in cells %}
+        <div class="cell {{ 'occupied' if cell.is_occupied else 'free' }}">
+            {{ loop.index }}
+        </div>
+    {% endfor %}
+</div>
+
+    <p><a href="/rgz2/" style="vertical-align: bottom;"> Назад </a></p>
+    
+{% endblock %}

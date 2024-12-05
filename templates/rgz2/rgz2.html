@@ -1,13 +1,28 @@
-{% extends "base.html" %}
+{% extends "rgz_style.html" %}
 
 {% block lab %} Расчетно-графическое задание {% endblock %}
 
 {% block main %}
 
-    <h1>StorageHub</h1>
-    
-            <a href="/rgz2/login" style="color: #1f3b47;"><button>Войти</button></a>
-            <a href="/rgz2/register" style="color: #1f3b47;"><button> Регистрация</button></a>
+<h1>StorageHub</h1>
+
+    {% if user %}
+
+    <p>Добро пожаловать, {{ user }}!</p>
+
+    {% else %}
+
+    <p>Вы не авторизованы.</p>
+
+    {% endif %}
+
+    <a href="/rgz2/storage" style="color: #1f3b47;"><button>Камеры хранения</button></a>
+    <a href="/rgz2/login" style="color: #1f3b47;"><button>Войти</button></a>
+    <a href="/rgz2/register" style="color: #1f3b47;"><button>Регистрация</button></a>
+
+    {% if user %}
+        <a href="/rgz2/logout" style="color: #1f3b47;"><button>Выйти</button></a> 
+    {% endif %}
     
 
 {% endblock %}
