@@ -6,6 +6,7 @@ from lab3 import lab3
 from lab4 import lab4
 from lab5 import lab5
 from lab6 import lab6
+from rgz2 import rgz2
 
 app = Flask(__name__)
 app.register_blueprint(lab1)
@@ -14,6 +15,7 @@ app.register_blueprint(lab3)
 app.register_blueprint(lab4)
 app.register_blueprint(lab5)
 app.register_blueprint(lab6)
+app.register_blueprint(rgz2)
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'сила в любви')
 app.config['DB_TYPE'] = os.getenv('DB_TYPE', 'postgres')
@@ -47,6 +49,7 @@ def menu():
             <li><a href="/lab4">Четвертая лабораторная</a></li>
             <li><a href="/lab5">Пятая лабораторная</a></li>
             <li><a href="/lab6">Шестая лабораторная</a></li>
+            <li><a href="/rgz2">StorageHub.Камера Хранения</a></li>
             
         </ol>
 
