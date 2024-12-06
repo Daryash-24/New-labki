@@ -4,6 +4,8 @@
 
 {% block main %}
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <h1>StorageHub</h1>
 
     {% if user %}
@@ -12,7 +14,7 @@
 
     {% else %}
 
-    <p>Вы не авторизованы.</p>
+    <p>Добро пожаловать! Пожалуйста, войдите в систему.</p>
 
     {% endif %}
 
@@ -23,15 +25,15 @@
     {% if user %}
         {% block script %}
         <script>
-            function deleteUser(userId) {
+            function deleteUser () {
                 if (confirm("Вы уверены, что хотите удалить пользователя?")) {
                     $.ajax({
                         type: 'DELETE',
                         url: '/rgz2/delete_user',
-                        data: { user_id: userId },
                         success: function(response) {
-                            alert(response);
+                            alert(response.message);
                             // Дополнительные действия после удаления пользователя, если необходимо
+                            window.location.href = '/rgz2/'; // Перенаправление на главную страницу
                         },
                         error: function(xhr) {
                             alert("Ошибка при удалении пользователя: " + xhr.responseText);
@@ -42,7 +44,7 @@
         </script>
         {% endblock %}
         <a href="/rgz2/logout" style="color: #1f3b47;"><button>Выйти</button></a> 
-        <button onclick="deleteUser ('{{ user }}');">Удалить пользователя</button>
+        <button onclick="deleteUser ();">Удалить пользователя</button>
     {% endif %}
     
 

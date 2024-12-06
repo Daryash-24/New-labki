@@ -5,6 +5,7 @@ from psycopg2.extras import RealDictCursor
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 from os import path
+import re
 
 rgz2 = Blueprint('rgz2', __name__, static_folder='static')
 
@@ -53,7 +54,7 @@ def rgz():
 
 
 
-@rgz2.route('/rgz2/register', methods = ['POST', 'GET'])
+@rgz2.route('/rgz2/register', methods=['POST', 'GET'])
 def register():
     if request.method == 'GET':
         return render_template('rgz2/register.html')
@@ -61,12 +62,20 @@ def register():
     login = request.form.get('login')
     password = request.form.get('password')
 
+    # Проверка на пустые поля
     if not (login and password):
         return render_template('rgz2/register.html', error='Заполните все поля')
 
+    # Валидация логина и пароля
+    if not re.match(r'^[a-zA-Z0-9!_]+$', login):
+        return render_template('rgz2/register.html', error='Логин может содержать только латинские буквы, цифры и символы ! и _')
+
+    if not re.match(r'^[a-zA-Z0-9!_]+$', password):
+        return render_template('rgz2/register.html', error='Пароль может содержать только латинские буквы, цифры и символы ! и _')
+
     conn, cur = db_connect()
 
-  # Используйте параметризованный запрос для проверки наличия пользователя
+    # Проверка наличия пользователя
     if current_app.config['DB_TYPE'] == 'postgres':
         cur.execute("SELECT login FROM users WHERE login=%s", (login,))
     else:
@@ -74,19 +83,19 @@ def register():
 
     if cur.fetchone():
         db_close(conn, cur)
-        return render_template('rgz2/register.html', error = 'Такой пользователь уже существует')
+        return render_template('rgz2/register.html', error='Такой пользователь уже существует')
 
-  # Используйте параметризованный запрос для вставки данных
-
+    # Хеширование пароля
     password_hash = generate_password_hash(password)
 
+    # Вставка данных в базу
     if current_app.config['DB_TYPE'] == 'postgres':
         cur.execute("INSERT INTO users (login, password) VALUES (%s, %s)", (login, password_hash))
     else:
         cur.execute("INSERT INTO users (login, password) VALUES (?, ?)", (login, password_hash))
 
     db_close(conn, cur)
-    return render_template('rgz2/success.html', login = login)
+    return render_template('rgz2/success.html', login=login)
 
 
 @rgz2.route('/rgz2/login', methods = ['POST', 'GET'])
@@ -135,6 +144,7 @@ def delete_user():
 
     conn, cur = db_connect()
     try:
+        # Получаем пользователя по логину
         cur.execute("SELECT * FROM users WHERE login = %s;", (login,))
         user = cur.fetchone()
 
@@ -144,16 +154,20 @@ def delete_user():
         # Освобождение забронированных ячеек
         cur.execute("SELECT id FROM storage_cells WHERE username = %s;", (login,))
         bookings = cur.fetchall()
-        for booking in bookings:
-            cur.execute("UPDATE storage_cells SET is_occupied = FALSE, username = NULL WHERE id = %s;", (booking['id'],))
+        
+        if bookings:
+            for booking in bookings:
+                cur.execute("UPDATE storage_cells SET is_occupied = FALSE, username = NULL WHERE id = %s;", (booking['id'],))
 
         # Удаление пользователя
         cur.execute("DELETE FROM users WHERE login = %s;", (login,))
         conn.commit()
-        return jsonify({"message": "Пользователь успешно удален и все его бронирования освобождены."}), 200
+
+        # Очистка сессии
+        session.pop('login', None)  # Удаляем логин из сессии
+        return jsonify({"message": "Пользователь успешно удален и все ваши бронирования освобождены."}), 200
 
     except Exception as e:
-        print(f"An error occurred: {e}")
         return jsonify({"error": "An error occurred"}), 500
     finally:
         db_close(conn, cur)
