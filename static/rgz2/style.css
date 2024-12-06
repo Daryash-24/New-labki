@@ -1,13 +1,13 @@
 body {
-    background-color: #81decd;
-    color: white;
-    font-family: Helvetica;
+    background-color: #f0f8ff; /* Нежный голубой фон */
+    color: #333; /* Темно-серый текст для лучшей читаемости */
+    font-family: Helvetica, sans-serif;
     font-size: 20px;
     margin-bottom: 100px;
 }
 
 footer {
-    background-color: #319180; 
+    background-color: #a0d3e8; /* Нежный голубой */
     color: #1f3b47; 
     font-family: helvetica; 
     text-align: center; 
@@ -20,93 +20,96 @@ footer {
 }
 
 header {
-    background-color: #c8e9f7; 
+    background-color: #e0f7fa; /* Нежный голубой */
     color: #1f3b47; 
-    padding: 30px;
+    padding: 20px;
     width: 100%;
-    font-size: 14pt
+    font-size: 14pt;
+    display: flex;
+    justify-content: flex-end; /* Выравнивание кнопок вправо */
 }
 
-button{
+button {
     margin: 5px;
-    margin-top: 10px;
-    margin-bottom: 10px;
     font-size: 16px;
-    background-color: #c8e9f7;
-    border: 2px solid  #8436eb;
-    border-radius: 5px;
-    padding: 12px 17px;
-    -webkit-transition-duration: 0.4s;
+    background-color: #b2ebf2; /* Нежный цвет кнопок */
+    border: 2px solid #00796b; /* Акцентный цвет */
+    border-radius: 25px; /* Овальные кнопки */
+    padding: 12px 20px;
     transition-duration: 0.4s;
 }
-button:hover{
-    background-color:  #8436eb; 
+
+button:hover {
+    background-color: #00796b; /* Темный акцентный цвет при наведении */
     color: white;
-    transform: scale(1.1)
+    transform: scale(1.05);
 }
 
-h1{
+h1 {
     text-align: center;
     margin-top: 70px;
     font-size: 50px;
 }
 
-h2{
+h2 {
     font-size: 35px;
     margin-left: 80px;
 }
 
-p{
+p {
     font-size: 20px;
     margin-left: 80px;
     margin-right: 100px;
     text-align: justify;
 }
 
-ol{
+ol {
     margin-left: 60px;
 }
 
 a {
-    color: #9702A7;
+    color: #00796b; /* Акцентный цвет для ссылок */
     text-decoration: none;
     transition: 1s;
 }
 
-a:link {
-    color: #9702A7;
-}
-
-a:visited {
-    color: #8436eb;
-}
-
 a:hover {
-    color: #eb36e5;
+    color: #004d40; /* Темный акцентный цвет при наведении */
     text-decoration: underline;
     transition: 0.3s;
 }
 
-a:active {
-    color: #EF54AC;
+/* Новый стиль для квадратного элемента с изображением */
+.image-container {
+    width: 200px; /* Ширина контейнера */
+    height: 200px; /* Высота контейнера */
+    border-radius: 15px; /* Мягкие углы */
+    overflow: hidden; /* Скрыть переполнение */
+    margin: 20px auto; /* Центрирование */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень */
 }
 
-nav {
-    text-align: center;
+.image-container img {
+    width: 100%; /* Ширина изображения */
+    height: 100%; /* Высота изображения */
+    object-fit: cover; /* Обеспечить обрезку изображения */
 }
 
-nav a {
-    color: blue;
-    text-decoration: none;
-    padding: 10px;
+/* Новый стиль для кнопки с камерами хранения */
+.storage-button {
+    width: 200px; /* Ширина кнопки */
+    height: 100px; /* Высота кнопки */
+    border-radius: 15px; /* Мягкие углы */
+    background-color: #b2ebf2; /* Нежный цвет кнопки */
+    border: 2px solid #00796b; /* Акцентный цвет */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px auto; /* Центрирование */
+    transition: background-color 0.4s;
 }
 
-nav a:hover {
-    text-decoration: underline;
-}
-
-.error{
-    color: red;
-    font-style: italic;
-    font-size: 15px;
+.storage-button:hover {
+    background-color: #00796b; /* Темный акцентный цвет при наведении */
+    color: white;
 }
