@@ -7,11 +7,11 @@ body {
 }
 
 footer {
-    background-color: #a0d3e8; /* Нежный голубой */
+    background-color: #fa8eaf;
     color: #1f3b47; 
     font-family: helvetica; 
-    text-align: center; 
-    font-size: 20px;
+    text-align: right; 
+    font-size: 14px;
     position: fixed;
     padding: 10px;
     bottom: 0;
@@ -20,27 +20,30 @@ footer {
 }
 
 header {
-    background-color: #e0f7fa; /* Нежный голубой */
+    margin-top: -15px;
+    margin-left: -10px;
+    background-color: white; 
     color: #1f3b47; 
     padding: 10px;
     width: 100%;
     font-size: 14pt;
     display: flex;
     justify-content: flex-end; /* Выравнивание кнопок вправо */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);;
 }
 
 button {
     margin: 5px;
     font-size: 16px;
-    background-color: #b2ebf2; /* Нежный цвет кнопок */
-    border: 2px solid #00796b; /* Акцентный цвет */
+    background-color: #f0f8ff; /* Нежный цвет кнопок */
+    border: 2px solid #e6ecf2; 
     border-radius: 25px; /* Овальные кнопки */
     padding: 12px 20px;
     transition-duration: 0.4s;
 }
 
 button:hover {
-    background-color: #00796b; /* Темный акцентный цвет при наведении */
+    background-color: #fadb8e; 
     color: white;
     transform: scale(1.05);
 }
@@ -70,13 +73,13 @@ ol {
 }
 
 a {
-    color: #00796b; /* Акцентный цвет для ссылок */
+    color: #2990c7; /* Акцентный цвет для ссылок */
     text-decoration: none;
     transition: 1s;
 }
 
 a:hover {
-    color: #004d40; /* Темный акцентный цвет при наведении */
+    color: #fa8eaf; /* Темный акцентный цвет при наведении */
     text-decoration: underline;
     transition: 0.3s;
 }
@@ -85,13 +88,14 @@ a:hover {
 /* Новый стиль для квадратного элемента с изображением */
 .image-container {
     float: right;
-    width: 800px; /* Ширина контейнера */
-    height: 400px; /* Высота контейнера */
+    width: 1000px; /* Ширина контейнера */
+    height: 500px; /* Высота контейнера */
     border-radius: 15px; /* Мягкие углы */
     overflow: hidden; /* Скрыть переполнение */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень */
     margin-right: 80px; /* Отступ справа */
     margin-bottom: 50px;
+    position: relative;
 }
 
 .image-container img {
@@ -102,19 +106,57 @@ a:hover {
 
 /* Новый стиль для кнопки с камерами хранения */
 .storage-button {
-    width: 200px; /* Ширина кнопки */
-    height: 100px; /* Высота кнопки */
+    width: 400px; /* Ширина кнопки */
+    height: 250px; /* Высота кнопки */
     border-radius: 15px; /* Мягкие углы */
-    background-color: #b2ebf2; /* Нежный цвет кнопки */
-    border: 2px solid #00796b; /* Акцентный цвет */
+    background-color: white; /* Нежный цвет кнопки */
     display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 20px auto; /* Центрирование */
-    transition: background-color 0.4s;
+    flex-direction: column; /* Вертикальное выравнивание */
+    align-items: center; /* Центрирование по горизонтали */
+    justify-content: center; /* Центрирование по вертикали */
+    margin: 10px; /* Центрирование */
+    position: absolute; /* Устанавливаем абсолютное позиционирование */
+    top: 350px; /* Позиция сверху */
+    left: 50px; /* Позиция слева */
+    box-shadow: 0 4px 8px #042a23;
 }
 
-.storage-button:hover {
-    background-color: #00796b; /* Темный акцентный цвет при наведении */
-    color: white;
+.storage-button p {
+    margin-bottom: 10px; /* Отступ между текстом и кнопкой */
+}
+
+.registration-container {
+    width: 400px; /* Ширина контейнера */
+    padding: 20px; /* Внутренние отступы */
+    margin: 0 auto; /* Центрирование контейнера */
+    border-radius: 10px; /* Мягкие углы */
+    background-color: #f9f9f9; /* Цвет фона */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень */
+}
+
+.registration-container label {
+    display: block; /* Каждый элемент label на новой строке */
+    margin-bottom: 10px; /* Отступ между элементами */
+}
+
+.registration-container input {
+    width: 100%; /* Ширина полей ввода */
+    padding: 10px; /* Внутренние отступы */
+    border: 1px solid #ccc; /* Цвет рамки */
+    border-radius: 5px; /* Мягкие углы */
+}
+
+.registration-container button {
+    width: 100%; /* Ширина кнопки */
+    padding: 10px; /* Внутренние отступы */
+    border: none; /* Убираем рамку */
+    border-radius: 5px; /* Мягкие углы */
+    background-color: #4CAF50; /* Цвет фона кнопки */
+    color: white; /* Цвет текста кнопки */
+    font-size: 16px; /* Размер шрифта */
+    cursor: pointer; /* Курсор при наведении */
+}
+
+.registration-container button:hover {
+    background-color: #45a049; /* Цвет кнопки при наведении */
 }
