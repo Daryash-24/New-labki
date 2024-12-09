@@ -113,7 +113,6 @@ def login():
         return render_template ('rgz2/login.html', error = 'Заполните поля')
     
     conn, cur = db_connect()
-    cur = conn.cursor(cursor_factory = RealDictCursor)
 
     if current_app.config['DB_TYPE'] == 'postgres':
         cur.execute("SELECT * FROM users WHERE login=%s;", (login,))
