@@ -188,8 +188,12 @@ def storage():
         total_occupied = len(occupied_cells)
         total_free = len(free_cells)
 
+        # Получаем текущего пользователя
+        user = session.get('login')
+
         # Передаем данные в шаблон
         return render_template('rgz2/storage.html', 
+                               user=user,
                                cells=cells, 
                                total_occupied=total_occupied, 
                                total_free=total_free)

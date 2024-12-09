@@ -8,36 +8,37 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='rgz2/favicon.ico') }}">
 
     {% if user %}
-    {% block script %}
-    <script>
-        function deleteUser () {
-            if (confirm("Вы уверены, что хотите удалить пользователя?")) {
-                $.ajax({
-                    type: 'DELETE',
-                    url: '/rgz2/delete_user',
-                    success: function(response) {
-                        alert(response.message);
-                        // Дополнительные действия после удаления пользователя, если необходимо
-                        window.location.href = '/rgz2/'; // Перенаправление на главную страницу
-                    },
-                    error: function(xhr) {
-                        alert("Ошибка при удалении пользователя: " + xhr.responseText);
-                    }
-                });
+        {% block script %}
+        <script>
+            function deleteUser () {
+                if (confirm("Вы уверены, что хотите удалить пользователя?")) {
+                    $.ajax({
+                        type: 'DELETE',
+                        url: '/rgz2/delete_user',
+                        success: function(response) {
+                            alert(response.message);
+                            // Дополнительные действия после удаления пользователя, если необходимо
+                            window.location.href = '/rgz2/'; // Перенаправление на главную страницу
+                        },
+                        error: function(xhr) {
+                            alert("Ошибка при удалении пользователя: " + xhr.responseText);
+                        }
+                    });
+                }
             }
-        }
-    </script>
-    {% endblock %}
+        </script>
+        {% endblock %}
     {% endif %}
 </head>
 <body>
     <header>
         <div class="header-logo">
-            <img src="path/to/your/logo.png"> <!-- Замените на путь к вашему изображению -->
+            <img src="{{ url_for('static', filename='rgz2/photo.png') }}"> 
             <span>StorageHub</span>
         </div>
         
         <div class="header-buttons">
+            <a href="/rgz2/" style="color: #1f3b47;"><button>Главная</button></a>
             {% if user %}
                 <a href="/rgz2/logout" style="color: #1f3b47;"><button>Выйти</button></a> 
                 <button onclick="deleteUser ();">Удалить пользователя</button>
