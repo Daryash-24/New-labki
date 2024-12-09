@@ -17,12 +17,12 @@ def db_connect():
             password="postgres", 
             host="127.0.0.1"
         )
-        cur = conn.cursor()  # Создаем курсор для PostgreSQL
+        cur = conn.cursor(cursor_factory=RealDictCursor)  # Используем RealDictCursor для PostgreSQL
     else:
         dir_path = path.dirname(path.realpath(__file__))
         db_path = path.join(dir_path, "database.db")
         conn = sqlite3.connect(db_path)
-        conn.row_factory = sqlite3.Row
+        conn.row_factory = sqlite3.Row  # Устанавливаем row_factory для SQLite
         cur = conn.cursor()  # Создаем курсор для SQLite
 
     return conn, cur
@@ -199,8 +199,8 @@ def storage():
         cells = cur.fetchall()
 
         # Подсчитываем количество свободных и занятых ячеек
-        occupied_cells = [cell for cell in cells if cell[1]]  # Используем индекс 1 для is_occupied
-        free_cells = [cell for cell in cells if not cell[1]]  # Используем индекс 1 для is_occupied
+        occupied_cells = [cell for cell in cells if cell['is_occupied']]  # Используем строковой ключ
+        free_cells = [cell for cell in cells if not cell['is_occupied']]  # Используем строковой ключ
         
         total_occupied = len(occupied_cells)
         total_free = len(free_cells)
@@ -224,8 +224,6 @@ def booking():
         return "Вы не можете забронировать ячейку, пожалуйста, авторизуйтесь", 403
 
     cell_id = request.form.get('cell_id')  # Получаем id ячейки из формы
-    if not cell_id:
-        return "Не указан ID ячейки", 400
 
     conn, cur = db_connect()
     try:
@@ -238,19 +236,19 @@ def booking():
         cell = cur.fetchone()
 
         if cell is None:
-            return "Ячейка не найдена", 404
+            return "Cell not found", 404
 
         # Проверяем, занята ли ячейка
         if cell['is_occupied']:
-            return "Ячейка уже забронирована", 400
+            return "Cell is already booked", 400
 
         # Проверяем, сколько ячеек уже забронировано пользователем
         if current_app.config['DB_TYPE'] == 'postgres':
             cur.execute("SELECT COUNT(*) FROM storage_cells WHERE username = %s AND is_occupied = TRUE;", (login,))
         else:
             cur.execute("SELECT COUNT(*) FROM storage_cells WHERE username = ? AND is_occupied = TRUE;", (login,))
-        
-        booked_count = cur.fetchone()[0]  # Изменено на [0] для получения значения
+
+        booked_count = cur.fetchone()['count']
 
         if booked_count >= 5:
             return "Вы не можете забронировать более 5 ячеек.", 400
@@ -260,15 +258,16 @@ def booking():
             cur.execute("UPDATE storage_cells SET is_occupied = TRUE, username = %s WHERE id = %s;", (login, cell_id))
         else:
             cur.execute("UPDATE storage_cells SET is_occupied = TRUE, username = ? WHERE id = ?;", (login, cell_id))
-        
+
         conn.commit()
         return "Ячейка забронирована!", 200
 
     except Exception as e:
         print(f"An error occurred: {e}")
-        return "Произошла ошибка", 500
+        return "An error occurred", 500
     finally:
         db_close(conn, cur)
+
 
 @rgz2.route('/rgz2/cancellation', methods=['POST'])
 def cancellation():
