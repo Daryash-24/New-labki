@@ -224,6 +224,8 @@ def booking():
         return "Вы не можете забронировать ячейку, пожалуйста, авторизуйтесь", 403
 
     cell_id = request.form.get('cell_id')  # Получаем id ячейки из формы
+    if not cell_id:
+        return "Не указан ID ячейки", 400
 
     conn, cur = db_connect()
     try:
@@ -236,11 +238,11 @@ def booking():
         cell = cur.fetchone()
 
         if cell is None:
-            return "Cell not found", 404
+            return "Ячейка не найдена", 404
 
         # Проверяем, занята ли ячейка
         if cell['is_occupied']:
-            return "Cell is already booked", 400
+            return "Ячейка уже забронирована", 400
 
         # Проверяем, сколько ячеек уже забронировано пользователем
         if current_app.config['DB_TYPE'] == 'postgres':
@@ -248,7 +250,7 @@ def booking():
         else:
             cur.execute("SELECT COUNT(*) FROM storage_cells WHERE username = ? AND is_occupied = TRUE;", (login,))
         
-        booked_count = cur.fetchone()['count']
+        booked_count = cur.fetchone()[0]  # Изменено на [0] для получения значения
 
         if booked_count >= 5:
             return "Вы не можете забронировать более 5 ячеек.", 400
@@ -264,10 +266,9 @@ def booking():
 
     except Exception as e:
         print(f"An error occurred: {e}")
-        return "An error occurred", 500
+        return "Произошла ошибка", 500
     finally:
         db_close(conn, cur)
-
 
 @rgz2.route('/rgz2/cancellation', methods=['POST'])
 def cancellation():
