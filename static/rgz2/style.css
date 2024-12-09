@@ -125,30 +125,42 @@ a:hover {
     margin-bottom: 10px; /* Отступ между текстом и кнопкой */
 }
 
-.registration-container {
+.forma-container {
     width: 500px; /* Ширина контейнера */
-    height: 500px;
+    height: 300px;
     padding: 20px; /* Внутренние отступы */
     margin: 0 auto; /* Центрирование контейнера */
-    border-radius: 10px ; /* Мягкие углы */
+    border-radius: 10px; /* Мягкие углы */
     border: 2px solid black;
     background-color: white; /* Цвет фона */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень */
+    display: flex; /* Используем Flexbox */
+    flex-direction: column; /* Вертикальное расположение элементов */
+    justify-content: space-between; /* Распределяем пространство между элементами */
+    height: 100%; /* Устанавливаем высоту на 100% */
 }
 
-.registration-container label {
+.forma-container form {
+    flex-grow: 1; /* Позволяем форме занимать доступное пространство */
+}
+
+.forma-container p {
+    margin-top: 10px; /* Отступ сверху для кнопки "Назад" */
+}
+
+.forma-container label {
     display: block; /* Каждый элемент label на новой строке */
     margin-bottom: 10px; /* Отступ между элементами */
 }
 
-.registration-container input {
+.forma-container input {
     width: 100%; /* Ширина полей ввода */
     padding: 10px; /* Внутренние отступы */
     border: 1px solid #ccc; /* Цвет рамки */
     border-radius: 5px; /* Мягкие углы */
 }
 
-.registration-container button {
+.forma-container button {
     width: 100%; /* Ширина кнопки */
     padding: 10px; /* Внутренние отступы */
     border: none; /* Убираем рамку */
@@ -159,6 +171,6 @@ a:hover {
     cursor: pointer; /* Курсор при наведении */
 }
 
-.registration-container button:hover {
+.forma-container button:hover {
     background-color: #45a049; /* Цвет кнопки при наведении */
 }
