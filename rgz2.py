@@ -17,12 +17,14 @@ def db_connect():
             password="postgres", 
             host="127.0.0.1"
         )
+        cur = conn.cursor()  # Создаем курсор для PostgreSQL
     else:
         dir_path = path.dirname(path.realpath(__file__))
         db_path = path.join(dir_path, "database.db")
         conn = sqlite3.connect(db_path)
-    
-    return conn
+        cur = conn.cursor()  # Создаем курсор для SQLite
+
+    return conn, cur
 
 def db_close(conn, cur):
     conn.commit()
