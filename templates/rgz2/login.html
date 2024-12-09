@@ -12,22 +12,24 @@
 
     {% endif %}
 
-    <form action="/rgz2/login" method="post">
-        <div>
-            <label>
-                Логин: <input type="text" name="login">
-            </label>
-        </div>
+    <div class="forma-container">
+        <form action="/rgz2/login" method="post">
+            <div>
+                <label>
+                    Логин: <input type="text" name="login">
+                </label>
+            </div>
 
-        <div>
-            <label>
-                Пароль: <input type="password" name="password">
-            </label>
-        </div>
+            <div>
+                <label>
+                    Пароль: <input type="password" name="password">
+                </label>
+            </div>
 
-        <button type="submit">Вход</button>
-    </form>
-    
-    <p><a href="/rgz2/" style="vertical-align: bottom;"> Назад </a></p>
+            <button type="submit">Вход</button>
+        </form>
+        
+        <p><a href="/rgz2/" style="vertical-align: bottom;"> Назад </a></p>
+    </div>
 
 {% endblock %}
