@@ -38,7 +38,10 @@ def initialize_storage_cells():
     try:
         # Вставка 100 ячеек, если они еще не существуют
         for _ in range(100):
-            cur.execute("INSERT INTO storage_cells (is_occupied, username) VALUES (%s, %s);", (False, None))
+            if current_app.config['DB_TYPE'] == 'postgres':
+                cur.execute("INSERT INTO storage_cells (is_occupied, username) VALUES (%s, %s);", (False, None))
+            else:
+                cur.execute("INSERT INTO storage_cells (is_occupied, username) VALUES (?, ?);", (False, None))
 
         # Сохранение изменений
         conn.commit()
@@ -145,22 +148,38 @@ def delete_user():
     conn, cur = db_connect()
     try:
         # Получаем пользователя по логину
-        cur.execute("SELECT * FROM users WHERE login = %s;", (login,))
+        if current_app.config['DB_TYPE'] == 'postgres':
+            cur.execute("SELECT * FROM users WHERE login = %s;", (login,))
+        else:
+            cur.execute("SELECT * FROM users WHERE login = ?;", (login,))
+        
         user = cur.fetchone()
 
         if user is None:
             return jsonify({"error": "User  not found"}), 404
 
         # Освобождение забронированных ячеек
-        cur.execute("SELECT id FROM storage_cells WHERE username = %s;", (login,))
+        if current_app.config['DB_TYPE'] == 'postgres':
+            cur.execute("SELECT id FROM storage_cells WHERE username = %s;", (login,))
+        else:
+           cur.execute("SELECT id FROM storage_cells WHERE username = ?;", (login,)) 
+        
         bookings = cur.fetchall()
         
         if bookings:
             for booking in bookings:
-                cur.execute("UPDATE storage_cells SET is_occupied = FALSE, username = NULL WHERE id = %s;", (booking['id'],))
+                if current_app.config['DB_TYPE'] == 'postgres':
+                    cur.execute("UPDATE storage_cells SET is_occupied = FALSE, username = NULL WHERE id = %s;", (booking['id'],))
+                else:
+                    cur.execute("UPDATE storage_cells SET is_occupied = FALSE, username = NULL WHERE id = ?;", (booking['id'],))
+
 
         # Удаление пользователя
-        cur.execute("DELETE FROM users WHERE login = %s;", (login,))
+        if current_app.config['DB_TYPE'] == 'postgres':
+            cur.execute("DELETE FROM users WHERE login = %s;", (login,))
+        else:
+            cur.execute("DELETE FROM users WHERE login = ?;", (login,))
+        
         conn.commit()
 
         # Очистка сессии
@@ -211,7 +230,11 @@ def booking():
     conn, cur = db_connect()
     try:
         # Проверяем, существует ли ячейка
-        cur.execute("SELECT * FROM storage_cells WHERE id = %s;", (cell_id,))
+        if current_app.config['DB_TYPE'] == 'postgres':
+            cur.execute("SELECT * FROM storage_cells WHERE id = %s;", (cell_id,))
+        else:
+            cur.execute("SELECT * FROM storage_cells WHERE id = ?;", (cell_id,))
+
         cell = cur.fetchone()
 
         if cell is None:
@@ -222,14 +245,22 @@ def booking():
             return "Cell is already booked", 400
 
         # Проверяем, сколько ячеек уже забронировано пользователем
-        cur.execute("SELECT COUNT(*) FROM storage_cells WHERE username = %s AND is_occupied = TRUE;", (login,))
+        if current_app.config['DB_TYPE'] == 'postgres':
+            cur.execute("SELECT COUNT(*) FROM storage_cells WHERE username = %s AND is_occupied = TRUE;", (login,))
+        else:
+            cur.execute("SELECT COUNT(*) FROM storage_cells WHERE username = ? AND is_occupied = TRUE;", (login,))
+        
         booked_count = cur.fetchone()['count']
 
         if booked_count >= 5:
             return "Вы не можете забронировать более 5 ячеек.", 400
 
         # Бронирование ячейки
-        cur.execute("UPDATE storage_cells SET is_occupied = TRUE, username = %s WHERE id = %s;", (login, cell_id))
+        if current_app.config['DB_TYPE'] == 'postgres':
+            cur.execute("UPDATE storage_cells SET is_occupied = TRUE, username = %s WHERE id = %s;", (login, cell_id))
+        else:
+            cur.execute("UPDATE storage_cells SET is_occupied = TRUE, username = ? WHERE id = ?;", (login, cell_id))
+        
         conn.commit()
         return "Ячейка забронирована!", 200
 
@@ -251,7 +282,10 @@ def cancellation():
     conn, cur = db_connect()
     try:
         # Проверяем, существует ли ячейка
-        cur.execute("SELECT * FROM storage_cells WHERE id = %s;", (cell_id,))
+        if current_app.config['DB_TYPE'] == 'postgres':
+            cur.execute("SELECT * FROM storage_cells WHERE id = %s;", (cell_id,))
+        else:
+            cur.execute("SELECT * FROM storage_cells WHERE id = ?;", (cell_id,))
         cell = cur.fetchone()
 
         if cell is None:
@@ -266,7 +300,10 @@ def cancellation():
             return "Вы не можете снять чужую бронь", 403
 
         # Отмена бронирования
-        cur.execute("UPDATE storage_cells SET is_occupied = FALSE, username = NULL WHERE id = %s;", (cell_id,))
+        if current_app.config['DB_TYPE'] == 'postgres':
+            cur.execute("UPDATE storage_cells SET is_occupied = FALSE, username = NULL WHERE id = %s;", (cell_id,))
+        else:
+            cur.execute("UPDATE storage_cells SET is_occupied = FALSE, username = NULL WHERE id = ?;", (cell_id,))
         conn.commit()
         return "Бронь снята!", 200
 
@@ -290,7 +327,10 @@ def view_cells():
 def get_cell_details(cell_id):
     conn, cur = db_connect()
     try:
-        cur.execute("SELECT * FROM storage_cells WHERE id = %s;", (cell_id,))
+        if current_app.config['DB_TYPE'] == 'postgres':
+            cur.execute("SELECT * FROM storage_cells WHERE id = %s;", (cell_id,))
+        else:
+            cur.execute("SELECT * FROM storage_cells WHERE id = ?;", (cell_id,))
         cell = cur.fetchone()
 
         if cell is None:
