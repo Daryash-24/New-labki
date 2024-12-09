@@ -22,6 +22,7 @@ def db_connect():
         dir_path = path.dirname(path.realpath(__file__))
         db_path = path.join(dir_path, "database.db")
         conn = sqlite3.connect(db_path)
+        conn.row_factory = sqlite3.Row
         cur = conn.cursor()  # Создаем курсор для SQLite
 
     return conn, cur
@@ -191,15 +192,15 @@ def delete_user():
 
 @rgz2.route('/rgz2/storage', methods=['GET'])
 def storage():
-    conn, cur = db_connect()
+    conn, cur = db_connect()  # Получаем соединение и курсор
     try:
         # Получаем все ячейки из базы данных, сортируя по id
         cur.execute("SELECT * FROM storage_cells ORDER BY id;")
         cells = cur.fetchall()
 
         # Подсчитываем количество свободных и занятых ячеек
-        occupied_cells = [cell for cell in cells if cell['is_occupied']]
-        free_cells = [cell for cell in cells if not cell['is_occupied']]
+        occupied_cells = [cell for cell in cells if cell[1]]  # Используем индекс 1 для is_occupied
+        free_cells = [cell for cell in cells if not cell[1]]  # Используем индекс 1 для is_occupied
         
         total_occupied = len(occupied_cells)
         total_free = len(free_cells)
