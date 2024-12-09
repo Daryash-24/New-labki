@@ -1,6 +1,6 @@
-{% extends "rgz_style.html" %}
+{% extends "base.html" %}
 
-{% block lab %} {% endblock %}
+{% block lab %} Лабораторная работа 5 {% endblock %}
 
 {% block main %}
 
@@ -12,8 +12,7 @@
 
     {% endif %}
 
-    <div class="registration-container">
-        <form action="/lab5/register" method="post" accept-charset="UTF-8">
+        <form action="/rgz2/register" method="post" accept-charset="UTF-8">
             <div>
                 <label>
                     Логин: <input type="text" name="login" required>

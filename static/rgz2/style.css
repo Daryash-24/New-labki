@@ -126,11 +126,13 @@ a:hover {
 }
 
 .registration-container {
-    width: 400px; /* Ширина контейнера */
+    width: 500px; /* Ширина контейнера */
+    height: 500px;
     padding: 20px; /* Внутренние отступы */
     margin: 0 auto; /* Центрирование контейнера */
-    border-radius: 10px; /* Мягкие углы */
-    background-color: #f9f9f9; /* Цвет фона */
+    border-radius: 10px ; /* Мягкие углы */
+    border: 2px solid black;
+    background-color: white; /* Цвет фона */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень */
 }
 
