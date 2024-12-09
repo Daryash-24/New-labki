@@ -5,10 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StorageHub, the luggage storage network  </title>
     <link rel="stylesheet" href={{url_for('static', filename='rgz2/style.css')}}>
-    <link rel="shortcut icon" href="{{ url_for('static', filename='lab1/favicon.ico') }}">
-    <style>
-    
-    </style>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='rgz2/favicon.ico') }}">
 
     {% if user %}
     {% block script %}
@@ -35,13 +32,20 @@
 </head>
 <body>
     <header>
-        {% if user %}
-            <a href="/rgz2/logout" style="color: #1f3b47;"><button>Выйти</button></a> 
-            <button onclick="deleteUser ();">Удалить пользователя</button>
-        {% else %}
-            <a href="/rgz2/login" style="color: #1f3b47;"><button>Войти</button></a>
-            <a href="/rgz2/register" style="color: #1f3b47;"><button>Зарегистрироваться</button></a>
-        {% endif %}
+        <div class="header-logo">
+            <img src="path/to/your/logo.png"> <!-- Замените на путь к вашему изображению -->
+            <span>StorageHub</span>
+        </div>
+        
+        <div class="header-buttons">
+            {% if user %}
+                <a href="/rgz2/logout" style="color: #1f3b47;"><button>Выйти</button></a> 
+                <button onclick="deleteUser ();">Удалить пользователя</button>
+            {% else %}
+                <a href="/rgz2/login" style="color: #1f3b47;"><button>Войти</button></a>
+                <a href="/rgz2/register" style="color: #1f3b47;"><button>Зарегистрироваться</button></a>
+            {% endif %}
+        </div>
     </header>
 
     <main>

@@ -28,8 +28,24 @@ header {
     width: 100%;
     font-size: 14pt;
     display: flex;
-    justify-content: flex-end; /* Выравнивание кнопок вправо */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);;
+    justify-content: space-between; /* Распределяем пространство между элементами */
+    align-items: center; /* Выравнивание по вертикали */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.header-logo {
+    display: flex; /* Используем Flexbox для логотипа и текста */
+    align-items: center; /* Выравнивание по вертикали */
+}
+
+.header-logo img {
+    height: 40px; /* Устанавливаем высоту изображения */
+    margin-right: 10px; /* Отступ между изображением и текстом */
+}
+
+.header-buttons {
+    display: flex; /* Используем Flexbox для кнопок */
+    gap: 10px; /* Отступ между кнопками */
 }
 
 button {
