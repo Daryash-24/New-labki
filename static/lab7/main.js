@@ -54,7 +54,8 @@ function deleteFilm(id, title) {
 }
 
 function showModal() {
-    document.getElementById('film-modal').style.display = 'block'; // Показываем модальное окно
+    document.getElementById('film-modal').style.display = 'block';
+    document.getElementById('description-error').innerText = ''; 
 }
 
 function hideModal() {
@@ -75,28 +76,41 @@ function addFilm() {
 }
 
 function sendFilm() {
-    const id = document.getElementById('id').value
+    const id = document.getElementById('id').value;
     const film = {
         title: document.getElementById('title').value,
         title_ru: document.getElementById('title_ru').value, 
         year: document.getElementById('year').value,
         description: document.getElementById('description').value 
     }
-    const url = `/lab7/rest-api/films/${id}`;
+    const url = id === '' ? `/lab7/rest-api/films` : `/lab7/rest-api/films/${id}`;
     const method = id === '' ? 'POST' : 'PUT';
     fetch(url, {
         method: method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(film)
     })
-    .then(function() {
+    .then(function(resp) {
+        if(resp.ok) {
+            return resp.json(); 
+        }
+        return resp.json().then(errors => {
+            throw errors; 
+        });
+    })
+    .then(function(data) {
         fillFilmList();
         hideModal();
     })
     .catch(function (error) {
-        console.error('Ошибка при добавлении фильма:', error);
+        if (error.description) {
+            document.getElementById('description-error').innerText = error.description;
+        } else {
+            console.error('Ошибка при добавлении фильма:', error);
+        }
     });
 }
+
 
 function editFilm(id) {
     fetch(`/lab7/rest-api/films/${id}`)

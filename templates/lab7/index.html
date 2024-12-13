@@ -61,6 +61,10 @@
     .modal button:hover {
         background-color: #f0f0f0; /* Цвет фона при наведении */
     }
+
+    .error-message {
+        color: red;
+    }
 </style>
 
 {% endblock %}
@@ -107,6 +111,7 @@
             <label>
                 Описание:
                 <textarea id="description"></textarea>
+                <div id="description-error" class="error-message"></div>
             </label>
             <div class="modal-buttons"> 
                 <button onclick="sendFilm()">ОК</button>
