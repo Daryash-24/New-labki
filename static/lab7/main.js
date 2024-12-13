@@ -49,3 +49,47 @@ function deleteFilm(id, title) {
             fillFilmList();
         })
 }
+
+function showModal() {
+    document.getElementById('film-modal').style.display = 'block'; // Показываем модальное окно
+}
+
+function hideModal() {
+    document.getElementById('film-modal').style.display = 'none'; // Скрываем модальное окно
+}
+
+function cancel() {
+    hideModal(); // Скрываем модальное окно при нажатии "Отмена"
+}
+
+function addFilm() {
+    document.getElementById('id').value = '';
+    document.getElementById('title').value = '';
+    document.getElementById('title_ru').value = '';
+    document.getElementById('year').value = '';
+    document.getElementById('description').value = '';
+    showModal();
+}
+
+function sendFilm() {
+    const film = {
+        title: document.getElementById('title').value,
+        title_ru: document.getElementById('title_ru').value, 
+        year: document.getElementById('year').value,
+        description: document.getElementById('description').value 
+    }
+    const url = `/lab7/rest-api/films`; // Это правильный маршрут
+    const method = 'POST';
+    fetch(url, {
+        method: method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(film)
+    })
+    .then(function() {
+        fillFilmList();
+        hideModal();
+    })
+    .catch(function (error) {
+        console.error('Ошибка при добавлении фильма:', error);
+    });
+}

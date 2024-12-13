@@ -6,6 +6,63 @@
 
 <script src="{{ url_for('static', filename='lab7/main.js') }}"></script>
 
+<style>
+    .modal {
+        display: none; /* Скрыто по умолчанию */
+        position: fixed; /* Окно фиксировано на экране */
+        z-index: 1000; /* Поверх других элементов */
+        left: 50%; /* Центрирование по горизонтали */
+        top: 50%; /* Центрирование по вертикали */
+        transform: translate(-50%, -50%); /* Центрирование окна */
+        width: 50%; /* Ширина модального окна */
+        max-width: 600px; /* Максимальная ширина */
+        background-color: rgba(0, 0, 0, 0.8); /* Полупрозрачный фон */
+        justify-content: center; /* Центрирование по горизонтали */
+        align-items: center; /* Центрирование по вертикали */
+    }
+    
+    .modal-content {
+        padding: 25px; /* Отступы внутри окна */
+        border-radius: 8px; /* Закругленные углы */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень */
+        overflow: auto; /* Прокрутка при переполнении */
+        max-height: 80vh; /* Максимальная высота окна */
+    }
+    
+    .modal label {
+        display: block; /* Каждый label на новой строке */
+        margin-bottom: 10px; /* Отступ между label */
+    }
+    
+    .modal input[type="text"],
+    .modal input[type="number"],
+    .modal textarea {
+        width: 100%; /* Полная ширина полей ввода */
+        padding: 8px; /* Отступы внутри полей */
+        margin-top: 5px; /* Отступ сверху */
+        border: 1px solid #ccc; /* Граница */
+        border-radius: 4px; /* Закругленные углы */
+    }
+    
+    .modal-buttons {
+        display: flex; /* Используем flexbox для кнопок */
+        justify-content: flex-end; /* Выравнивание кнопок вправо */
+        margin-top: 20px; /* Отступ сверху для кнопок */
+    }
+    
+    .modal button {
+        margin-left: 10px; /* Отступ между кнопками */
+        padding: 10px 15px; /* Отступы внутри кнопок */
+        border: none; /* Без границы */
+        border-radius: 4px; /* Закругленные углы */
+        cursor: pointer; /* Курсор в виде указателя */
+    }
+    
+    .modal button:hover {
+        background-color: #f0f0f0; /* Цвет фона при наведении */
+    }
+</style>
+
 {% endblock %}
 
 {% block main %}
@@ -28,7 +85,34 @@
     </script>
 
     <div>
-        <button onclick="addFilm()">Добавить фильм</button>
+        <button onclick="showModal()">Добавить фильм</button>
+    </div>
+
+    <div class="modal" id="film-modal">
+        <div class="modal-content"> <!-- Новый div для содержимого -->
+            <input type="hidden" id="id">
+            <label>
+                Название фильма на русском:
+                <input type="text" id="title_ru">
+            </label>
+            <label>
+                Название фильма на оригинальном языке<br>
+                <i>(Если фильм русский, то оставьте пустым):</i>
+                <input type="text" id="title">
+            </label>
+            <label>
+                Год выпуска:
+                <input type="number" id="year">
+            </label>
+            <label>
+                Описание:
+                <textarea id="description"></textarea>
+            </label>
+            <div class="modal-buttons"> 
+                <button onclick="sendFilm()">ОК</button>
+                <button onclick="cancel()">Отмена</button>
+            </div>
+        </div>
     </div>
 
 {% endblock %}
