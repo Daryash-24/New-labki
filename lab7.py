@@ -114,3 +114,10 @@ def put_film(id):
     films[id] = film
     return films[id]
 
+
+@lab7.route('/lab7/rest-api/films/<int:id>', methods=['POST'])
+def add_film():
+    film = request.get_json() 
+    films.append(film)  
+    return {'id': len(films) - 1}, 201
+
