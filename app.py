@@ -1,7 +1,7 @@
 from flask import Flask, redirect, url_for
 import os
 from os import path
-from db import db  # Импортируйте db из db/__init__.py
+from db import db  
 from db.models import users, article
 from lab1 import lab1
 from lab2 import lab2
