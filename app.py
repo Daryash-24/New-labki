@@ -1,9 +1,8 @@
-from flask import Flask, redirect, url_for, render_template, render_template_string, abort, request, session
+from flask import Flask, redirect, url_for
 import os
 from os import path
-from db import db
-from flask_sqlalchemy import SQLAlchemy
-from db import db
+from db import db  # Импортируйте db из db/__init__.py
+from db.models import users, article
 from lab1 import lab1
 from lab2 import lab2
 from lab3 import lab3
@@ -28,8 +27,6 @@ app.register_blueprint(rgz2)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'сила в любви')
 app.config['DB_TYPE'] = os.getenv('DB_TYPE', 'postgres')
 
-db = SQLAlchemy()
-
 if app.config['DB_TYPE'] == 'postgresql':
     db_name = 'darya_dybalina_orm'
     db_user = 'darya_dybalina_orm'
@@ -44,14 +41,15 @@ else:
     db_path = path.join(dir_path, 'darya_dybalina_orm.db')
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
 
-db.init_app(app)
+db.init_app(app)  # Инициализация db с приложением
 
+with app.app_context():
+    db.create_all()
 
 @app.route("/")
 @app.route("/index")
-
 def start():
-    return redirect ("/menu", code=302)
+    return redirect("/menu", code=302)
 
 @app.route("/menu")
 def menu():
@@ -78,13 +76,10 @@ def menu():
             <li><a href="/lab7">Седьмая лабораторная</a></li>
             <li><a href="/lab8">Восьмая лабораторная</a></li>
             <li><a href="/rgz2">StorageHub.Камера Хранения</a></li>
-            
-            
         </ol>
 
         <footer>
             &copy; Дарья Александровна Дыбалина, ФБИ-23, 3 курс, 2024
-        </footer>
-    </body>
+        </footer </body>
 </html>
 '''
