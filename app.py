@@ -3,6 +3,9 @@ import os
 from os import path
 from db import db  
 from db.models import users, article
+from flask_login import LoginManager
+
+
 from lab1 import lab1
 from lab2 import lab2
 from lab3 import lab3
@@ -23,6 +26,14 @@ app.register_blueprint(lab6)
 app.register_blueprint(lab7)
 app.register_blueprint(lab8)
 app.register_blueprint(rgz2)
+
+login_manager = LoginManager()
+login_manager.login_view = 'lab8.login'
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_users(login_id):
+    return users.query.get(int(login_id))
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'сила в любви')
 app.config['DB_TYPE'] = os.getenv('DB_TYPE', 'postgres')

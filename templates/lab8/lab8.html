@@ -3,85 +3,79 @@
 {% block lab %} Лабораторная работа 8 {% endblock %}
 
 {% block main %}
-<style>
-.baza h3 {
-    float: right;
-    margin-right: 20px;
-    font-size: 20px;
-    padding: 5px;
+    <style>
+    .baza h3 {
+        float: right;
+        margin-right: 20px;
+        font-size: 20px;
+        padding: 5px;
+        }
+    .baza{
+        background-color: #c8e9f7;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center; 
+        width: 100%; 
+        }
+
+    body {
+        background-color: whitesmoke;
+        color: #1f3b47;
+        font-family: Helvetica;
+        font-size: 20px;
+        margin-bottom: 100px;
     }
-.baza{
-    background-color: #c8e9f7;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    text-align: center; 
-    width: 100%; 
+
+    footer {
+        background-color: #316691; 
+        color: white; 
+        font-family: helvetica; 
+        text-align: center; 
+        font-size: 20px;
+        position: fixed;
+        padding: 10px;
+        bottom: 0;
+        right: 0;
+        left: 0;
     }
 
-body {
-    background-color: whitesmoke;
-    color: #1f3b47;
-    font-family: Helvetica;
-    font-size: 20px;
-    margin-bottom: 100px;
-}
+    header {
+        background-color: #c8e9f7; 
+        color: #1f3b47; 
+        padding: 30px;
+        width: 100%;
+        font-size: 14pt
+    }
 
-footer {
-    background-color: #316691; 
-    color: white; 
-    font-family: helvetica; 
-    text-align: center; 
-    font-size: 20px;
-    position: fixed;
-    padding: 10px;
-    bottom: 0;
-    right: 0;
-    left: 0;
-}
-
-header {
-    background-color: #c8e9f7; 
-    color: #1f3b47; 
-    padding: 30px;
-    width: 100%;
-    font-size: 14pt
-}
-
-button{
-    margin: 5px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    font-size: 16px;
-    background-color: #c8e9f7;
-    border: 2px solid  #8436eb;
-    border-radius: 5px;
-    padding: 12px 17px;
-    -webkit-transition-duration: 0.4s;
-    transition-duration: 0.4s;
-}
-    
-</style>
+    button{
+        margin: 5px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        font-size: 16px;
+        background-color: #c8e9f7;
+        border: 2px solid  #8436eb;
+        border-radius: 5px;
+        padding: 12px 17px;
+        -webkit-transition-duration: 0.4s;
+        transition-duration: 0.4s;
+    }
+        
+    </style>
     <h1>База знаний</h1>
     
-        <div class="baza">
-            <a href="/lab8/list" style="color: #1f3b47;"><button>Список статей</button></a>
-            <a href="/lab8/create" style="color: #1f3b47;"><button>Создать статью</button></a>
+    <div class="baza">
+        <a href="/lab8/articles" style="color: #1f3b47;"><button>Список статей</button></a>
+        <a href="/lab8/create" style="color: #1f3b47;"><button>Создать статью</button></a>
+        
+        {% if user %}
+            <h3>{{ user }}</h3>
+            <a href="/lab8/users"><button>Список зарегистрированных пользователей</button></a>
+            <a href="/lab8/logout"><button>Выйти</button></a>
+        {% else %}
             <a href="/lab8/login" style="color: #1f3b47;"><button>Войти</button></a>
-            <a href="/lab8/register" style="color: #1f3b47;"><button> Регистрация</button></a>
-            {% if user %}
-
-                <h3>{{ user }}</h3>
-                
-                <a href="/lab8/users"><button>Список зарегистрированных пользователей</button></a>
-                <a href="/lab8/logout"><button>Выйти</button></a>
-                
-            {% else %}
-
-                <h3>Anonymous</h3>
-
-            {% endif %}
-        </div>
-    
-
+            <a href="/lab8/register" style="color: #1f3b47;"><button>Регистрация</button></a>
+            <h3>Anonymous</h3>
+        {% endif %}
+    </div>
 {% endblock %}
