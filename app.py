@@ -2,7 +2,7 @@ from flask import Flask, redirect, url_for
 import os
 from os import path
 from db import db  
-from db.models import users, article
+from db.models import users, Article
 from flask_login import LoginManager
 
 from lab1 import lab1
