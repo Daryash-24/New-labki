@@ -5,7 +5,6 @@ from db import db
 from db.models import users, article
 from flask_login import LoginManager
 
-
 from lab1 import lab1
 from lab2 import lab2
 from lab3 import lab3
@@ -35,7 +34,7 @@ login_manager.init_app(app)
 def load_users(login_id):
     return users.query.get(int(login_id))
 
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'сила в любви')
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'сила_в_любви')
 app.config['DB_TYPE'] = os.getenv('DB_TYPE', 'postgres')
 
 if app.config['DB_TYPE'] == 'postgresql':
