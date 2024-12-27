@@ -69,23 +69,36 @@ def congratulation():
         if preference == 'tasty':
             if sub_preference == 'sweet':
                 gift = "Вот тебе подарок — мешочек конфет."
-                image = "static/lab9/candies.jpg"  # Путь к картинке с конфетами
+                image = "/lab9/candies.jpg"  # Путь к картинке с конфетами
             else:
                 gift = "Вот тебе подарок — пицца."
-                image = "static/lab9/pizza.jpg"  # Путь к картинке с пиццей
+                image = "/lab9/pizza.jpg"  # Путь к картинке с пиццей
         else:
             gift = "Вот тебе подарок — набор для рисования."
-            image = "static/lab9/art_set.jpeg"  # Путь к картинке с набором для рисования
+            image = "/lab9/art_set.jpeg"  # Путь к картинке с набором для рисования
     else:
         greeting = f"Поздравляю тебя, {name}, желаю, чтобы ты быстро выросла, была умной..."
         if preference == 'tasty':
             if sub_preference == 'sweet':
                 gift = "Вот тебе подарок — торт."
-                image = "static/lab9/cake.jpg"  # Путь к картинке с тортом
+                image = "/lab9/cake.jpg"  # Путь к картинке с тортом
             else:
                 gift = "Вот тебе подарок — пицца."
-                image = "static/lab9/pizza.jpg"  # Путь к картинке с салатом
+                image = "/lab9/pizza.jpg"  # Путь к картинке с салатом
         else:
             gift = "Вот тебе подарок — набор для творчества."
-            image = "static/lab9/craft.jpg"  # Путь к картинке с набором для творчества
+            image = "/lab9/craft.jpg"  # Путь к картинке с набором для творчества
+
+            # Сохраняем данные в сессии
+    session['greeting'] = greeting
+    session['gift'] = gift
+    session['image'] = image
+
     return render_template('lab9/congratulation.html', greeting=greeting, gift=gift, image=image)
+
+@lab9.route('/lab9/reset', methods=['POST'])
+def reset():
+    session.pop('greeting', None)
+    session.pop('gift', None)
+    session.pop('image', None)
+    return redirect(url_for('lab9.get_name')) 
