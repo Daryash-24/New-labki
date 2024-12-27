@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block main %}
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-image: url('https://moscow.m-invest.ru/upload/iblock/7bd/4ixqjfej7gannypc3corqvrc0avymw47.jpeg'); /* Замените на URL вашего фона */
+        background-size: cover;
+        background-position: center;
+        color: #fff;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column; 
+        align-items: center;
+        height: 100vh;
+        text-align: center;
+        overflow: hidden;
+    }
+    .container {
+        width: 100%;
+        max-width: 800px; /* Максимальная ширина контейнера */
+        margin-top: 100px; /* Отступ сверху для контейнера, чтобы не перекрывался заголовком */
+        background-color: rgba(255, 0, 0, 0.8); /* Полупрозрачный красный фон */
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        animation: slideIn 0.5s ease-in-out;
+    }
+    header {
+        background-color: rgba(246, 250, 246, 0.7); /* Полупрозрачный зеленый фон для заголовка */
+        width: 100%;
+        padding: 20px;
+        position: relative; /* Относительное положение для заголовка */
+        z-index: 1000; /* Убедитесь, что заголовок выше других элементов */
+    }
+    .header-title {
+        margin: 0;
+        color: #FFD700; /* Золотой цвет */
+        text-align: center;
+        font-size: 2em;
+    }
+    .nav-menu {
+        list-style: none;
+        padding: 0;
+        text-align: center;
+    }
+    .nav-menu li {
+        display: inline; /* Горизонтальное расположение */
+        margin: 0 15px; /* Отступы между элементами */
+    }
+    .nav-menu a {
+        color: #fff; /* Белый цвет текста */
+        text-decoration: none; /* Убираем подчеркивание */
+        transition: color 0.3s; /* Плавный переход цвета */
+    }
+    .nav-menu a:hover {
+        color: #FFD700; /* Золотой цвет при наведении */
+    }
+    .content {
+        margin-top: 20px; /* Отступ сверху для контента */
+    }
+    h1 {
+        font-size: 3em;
+        margin-bottom: 20px;
+        color: #8e0202; /* Красный цвет */
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    }
+    .radio-group {
+        display: block;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px; /* Отступ снизу для группы радиокнопок */
+    }
+    input[type="radio"] {
+        margin: 10px; /* Отступы между радиокнопками */
+        cursor: pointer; /* Курсор при наведении */
+    }
+    label {
+        color: #fff; /* Цвет текста для меток */
+        font-size: 1.2em; /* Размер шрифта для меток */
+    }
+    button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #b30000; /* Красный цвет кнопки */
+        color: #fff; /* Белый цвет текста */
+        font-size: 1em;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    button:hover {
+        background-color: #ff0000; /* Более светлый красный при наведении */
+    }
+</style>
+
+<div class="container">
+    <div class="content">
+        <h1>Выберите подкатегорию, {{ name }}</h1>
+        <form method="post">
+            <div class="radio-group">
+                {% if preference == 'tasty' %}
+                    <input type="radio" name="sub_preference" value="sweet" id="sweet" required>
+                    <label for="sweet">Сладкое</label><br>
+                    <input type="radio" name="sub_preference" value="hearty" id="hearty">
+                    <label for="hearty">Сытное</label><br>
+                {% else %}
+                    <input type="radio" name="sub_preference" value="art" id="art" required>
+                    <label for="art">Искусство</label><br>
+                    <input type="radio" name="sub_preference" value="nature" id="nature">
+                    <label for="nature">Природа</label><br>
+                {% endif %}
+            </div>
+            <button type="submit">Далее</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

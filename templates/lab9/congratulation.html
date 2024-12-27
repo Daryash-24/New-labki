@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block main %}
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-image: url('https://moscow.m-invest.ru/upload/iblock/7bd/4ixqjfej7gannypc3corqvrc0avymw47.jpeg'); /* Замените на URL вашего фона */
+        background-size: cover;
+        background-position: center;
+        color: #fff;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column; 
+        align-items: center;
+        height: 100vh;
+        text-align: center;
+        overflow: hidden;
+    }
+    .container {
+        width: 100%;
+        max-width: 800px; /* Максимальная ширина контейнера */
+        margin-top: 100px; /* Отступ сверху для контейнера, чтобы не перекрывался заголовком */
+        background-color: rgba(255, 0, 0, 0.8); /* Полупрозрачный красный фон */
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        animation: slideIn 0.5s ease-in-out;
+    }
+    header {
+        background-color: rgba(245, 254, 245, 0.7); /* Полупрозрачный зеленый фон для заголовка */
+        width: 100%;
+        padding: 20px;
+        position: relative; /* Относительное положение для заголовка */
+        z-index: 1000; /* Убедитесь, что заголовок выше других элементов */
+    }
+    .header-title {
+        margin: 0;
+        color: #FFD700; /* Золотой цвет */
+        text-align: center;
+        font-size: 2em;
+    }
+    .nav-menu {
+        list-style: none;
+        padding: 0;
+        text-align: center;
+    }
+    .nav-menu li {
+        display: inline; /* Горизонтальное расположение */
+        margin: 0 15px; /* Отступы между элементами */
+    }
+    .nav-menu a {
+        color: #fff; /* Белый цвет текста */
+        text-decoration: none; /* Убираем подчеркивание */
+        transition: color 0.3s; /* Плавный переход цвета */
+    }
+    .nav-menu a:hover {
+        color: #FFD700; /* Золотой цвет при наведении */
+    }
+    .content {
+        margin-top: 20px;
+    }
+    h1 {
+        font-size: 3em;
+        margin-bottom: 20px;
+        color: #910000; /* Красный цвет */
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    input[type="number"] {
+        padding: 10px;
+        border-radius: 5px;
+        border: none;
+        margin-bottom: 15px;
+        width: 80%;
+        max-width: 300px;
+        font-size: 1em;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        transition: border 0.3s;
+    }
+    input[type="number"]:focus {
+        border: 2px solid #FFD700; /* Золотая рамка при фокусе */
+        outline: none; /* Убираем стандартный контур */
+    }
+    button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #b30000; /* Красный цвет кнопки */
+        color: #fff; /* Белый цвет текста */
+        font-size: 1em;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    button:hover {
+        background-color: #d20000; /* Более светлый красный при наведении */
+    }
+</style>
+
+<div class="container">
+
+    <div class="content">
+
+        <h1>{{ greeting }}</h1>
+        <p>{{ gift }}</p>
+        <img src="{{ url_for('lab9.static', filename=image) }}" alt="Подарок" class="gift-image">
+    </div>
+</div>
+{% endblock %}
